@@ -1,0 +1,55 @@
+SET allow_experimental_geo_types=1;
+
+CREATE DATABASE IF NOT EXISTS datawood;
+CREATE DATABASE IF NOT EXISTS datawood_replica;
+
+CREATE TABLE IF NOT EXISTS datawood.status_route_queue
+(
+    `geo.latitude`          Float64,
+    `geo.longitude`         Float64,
+    speed                   Float64,
+    status                  Bool,
+    railway_id              UUID,
+    datetime                DateTime
+)
+ENGINE=Kafka()
+SETTINGS
+kafka_broker_list = '{{ kafka.SERVERS }}',
+kafka_topic_list = '{{ kafka.TOPICS.STATUS_ROUTE }}',
+kafka_group_name = 'status_route_group1',
+kafka_format = 'JSONEachRow',
+input_format_import_nested_json=1;
+
+
+CREATE TABLE IF NOT EXISTS datawood.status_route
+(
+    id               UUID,
+    railway_id       UUID,
+    geo              Point,
+    status           Bool,
+    speed            Float64,
+    datetime         DateTime,
+    created_at       DateTime  DEFAULT now()
+)
+Engine=ReplicatedMergeTree('{{ node.STATUS_ROUTE.REPLICA_PATH }}', '{{ node.STATUS_ROUTE.REPLICA_NAME }}')
+PARTITION BY toYYYYMMDD(created_at)
+ORDER BY (id);
+
+
+CREATE MATERIALIZED VIEW IF NOT EXISTS datawood.status_route_consumer
+TO datawood.status_route
+AS SELECT railway_id, status, speed, datetime, tuple(geo.latitude, geo.longitude) as geo, generateUUIDv4() as id
+FROM datawood.status_route_queue;
+
+
+CREATE TABLE IF NOT EXISTS {{ node.STATUS_ROUTE.DISTRIBUTED_TABLE }}
+(
+    id               UUID,
+    railway_id       UUID,
+    geo              Point,
+    status           Bool,
+    speed            Float64,
+    datetime         DateTime,
+    created_at       DateTime  DEFAULT now()
+)
+ENGINE = Distributed('{{ node.CLUSTER }}', '', STATUS_ROUTE, rand());
