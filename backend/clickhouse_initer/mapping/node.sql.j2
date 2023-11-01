@@ -7,8 +7,10 @@ CREATE TABLE IF NOT EXISTS datawood.status_route_queue
 (
     `geo.latitude`          Float64,
     `geo.longitude`         Float64,
+    train_id                UUID,
     speed                   Float64,
-    status                  Bool,
+    num_railway_carriage    UInt8,
+    status                  String,
     railway_id              UUID,
     datetime                DateTime
 )
@@ -23,13 +25,15 @@ input_format_import_nested_json=1;
 
 CREATE TABLE IF NOT EXISTS datawood.status_route
 (
-    id               UUID,
-    railway_id       UUID,
-    geo              Point,
-    status           Bool,
-    speed            Float64,
-    datetime         DateTime,
-    created_at       DateTime  DEFAULT now()
+    id                      UUID,
+    train_id                UUID,
+    railway_id              UUID,
+    geo                     Point,
+    status                  String,
+    speed                   Float64,
+    num_railway_carriage    UInt8,
+    datetime                DateTime,
+    created_at              DateTime  DEFAULT now()
 )
 Engine=ReplicatedMergeTree('{{ node.STATUS_ROUTE.REPLICA_PATH }}', '{{ node.STATUS_ROUTE.REPLICA_NAME }}')
 PARTITION BY toYYYYMMDD(created_at)
@@ -44,12 +48,14 @@ FROM datawood.status_route_queue;
 
 CREATE TABLE IF NOT EXISTS {{ node.STATUS_ROUTE.DISTRIBUTED_TABLE }}
 (
-    id               UUID,
-    railway_id       UUID,
-    geo              Point,
-    status           Bool,
-    speed            Float64,
-    datetime         DateTime,
-    created_at       DateTime  DEFAULT now()
+    id                      UUID,
+    train_id                UUID,
+    railway_id              UUID,
+    geo                     Point,
+    status                  String,
+    speed                   Float64,
+    num_railway_carriage    UInt8,
+    datetime                DateTime,
+    created_at              DateTime  DEFAULT now()
 )
 ENGINE = Distributed('{{ node.CLUSTER }}', '', STATUS_ROUTE, rand());

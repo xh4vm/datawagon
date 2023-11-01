@@ -1,4 +1,4 @@
-FROM python:3.10-slim AS clickhouse-initer-builder
+FROM python:3.11-slim AS clickhouse-initer-builder
 
 WORKDIR /opt
 COPY requirements.txt .
@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl tini \
     && pip install wheel && pip3 wheel -r requirements.txt --wheel-dir=/opt/wheels
 
 
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 COPY --from=clickhouse-initer-builder /opt /opt
 COPY --from=clickhouse-initer-builder /usr/bin/tini /usr/bin/tini
