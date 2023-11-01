@@ -4,7 +4,7 @@ x-base-service: &base_service
     - datawood
 
 x-redis: &base_redis
-  image: redis:7.0-alpine
+  image: redis:7.2.2-alpine
   container_name: redis
   restart: unless-stopped
   command: >
@@ -19,8 +19,7 @@ x-redis: &base_redis
 
 x-base-kafka: &base_kafka
   <<: *base_service
-  # image: bitnami/kafka:3.6.0
-  image: bitnami/kafka:3.4.1
+  image: bitnami/kafka:3.6.0
   
 x-base-clickhouse-node: &base-clickhouse-node
   env_file: .env
