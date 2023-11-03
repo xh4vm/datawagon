@@ -98,6 +98,9 @@ services:
     environment:
       - KAFKA_CFG_NODE_ID=1
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka01:9093,2@kafka02:9093,3@kafka03:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://kafka01:9092,CONTROLLER://kafka01:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka01:9092
+      - KAFKA_ENABLE_KRAFT=yes
 
   kafka02:
     <<: *base_kafka
@@ -112,6 +115,9 @@ services:
     environment:
       - KAFKA_CFG_NODE_ID=2
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka01:9093,2@kafka02:9093,3@kafka03:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://kafka02:9092,CONTROLLER://kafka02:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka02:9092
+      - KAFKA_ENABLE_KRAFT=yes
 
   kafka03:
     <<: *base_kafka
@@ -126,12 +132,17 @@ services:
     environment:
       - KAFKA_CFG_NODE_ID=3
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka01:9093,2@kafka02:9093,3@kafka03:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://kafka03:9092,CONTROLLER://kafka03:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka03:9092
+      - KAFKA_ENABLE_KRAFT=yes
 
   clickhouse-initer:
     <<: *base_service
     build: ./backend/clickhouse_initer
     container_name: clickhouse-initer
     env_file: .env
+    environment:
+      - CH_CLUSTER_NAME={CH_CLUSTER_NAME}
     profiles: 
       - dev
     volumes:
@@ -167,6 +178,7 @@ services:
       CH_NODE_SHARD_ID: 1
       CH_NODE_REPLICA_NAME: clickhouse-node01
       CH_KEEPER_SERVER_ID: 1
+      CH_USER: ${CLICKHOUSE_NODE01_USER}
       CH_PASSWORD: ${CLICKHOUSE_NODE01_PASSWORD}
 
   clickhouse-node02:
@@ -182,6 +194,7 @@ services:
       CH_NODE_HOST_NAME: clickhouse-node02
       CH_NODE_SHARD_ID: 1
       CH_NODE_REPLICA_NAME: clickhouse-node02
+      CH_USER: ${CLICKHOUSE_NODE02_USER}
       CH_PASSWORD: ${CLICKHOUSE_NODE02_PASSWORD}
     depends_on:
       clickhouse-keeper-quorum:
@@ -201,6 +214,7 @@ services:
       CH_NODE_SHARD_ID: 2
       CH_NODE_REPLICA_NAME: clickhouse-node03
       CH_KEEPER_SERVER_ID: 2
+      CH_USER: ${CLICKHOUSE_NODE03_USER}
       CH_PASSWORD: ${CLICKHOUSE_NODE03_PASSWORD}
     profiles:
       - dev
@@ -218,6 +232,7 @@ services:
       CH_NODE_HOST_NAME: clickhouse-node04
       CH_NODE_SHARD_ID: 2
       CH_NODE_REPLICA_NAME: clickhouse-node04
+      CH_USER: ${CLICKHOUSE_NODE04_USER}
       CH_PASSWORD: ${CLICKHOUSE_NODE04_PASSWORD}
     depends_on:
       clickhouse-keeper-quorum:
@@ -237,6 +252,7 @@ services:
       CH_NODE_SHARD_ID: 3
       CH_NODE_REPLICA_NAME: clickhouse-node05
       CH_KEEPER_SERVER_ID: 3
+      CH_USER: ${CLICKHOUSE_NODE05_USER}
       CH_PASSWORD: ${CLICKHOUSE_NODE05_PASSWORD}
     profiles:
       - dev
@@ -254,6 +270,7 @@ services:
       CH_NODE_HOST_NAME: clickhouse-node06
       CH_NODE_SHARD_ID: 3
       CH_NODE_REPLICA_NAME: clickhouse-node06
+      CH_USER: ${CLICKHOUSE_NODE06_USER}
       CH_PASSWORD: ${CLICKHOUSE_NODE06_PASSWORD}
     depends_on:
       clickhouse-keeper-quorum:

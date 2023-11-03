@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 
 class StatusRouteSettingsNode01(BaseSettings):
-    DISTRIBUTED_TABLE: str = Field(..., env="CH_STATUS_ROUTE_DISTRIBUTED_TABLE")
+    DISTRIBUTED_TABLE: str
     REPLICA_PATH: str
     REPLICA_NAME: str
 
@@ -16,7 +16,7 @@ class ClickhouseNode01(BaseSettings):
     PORT: int
     USER: str
     PASSWORD: str
-    CLUSTER: str = Field(..., env="CH_CLUSTER_NAME")
+    CLUSTER: str
     STATUS_ROUTE: BaseSettings = Field(default_factory=StatusRouteSettingsNode01)
 
     class Config:
@@ -24,7 +24,7 @@ class ClickhouseNode01(BaseSettings):
 
 
 class StatusRouteSettingsNode02(BaseSettings):
-    DISTRIBUTED_TABLE: str = Field(..., env="CH_STATUS_ROUTE_DISTRIBUTED_TABLE")
+    DISTRIBUTED_TABLE: str
     REPLICA_PATH: str
     REPLICA_NAME: str
 
@@ -37,7 +37,7 @@ class ClickhouseNode02(BaseSettings):
     PORT: int
     USER: str
     PASSWORD: str
-    CLUSTER: str = Field(..., env="CH_CLUSTER_NAME")
+    CLUSTER: str
     STATUS_ROUTE: BaseSettings = Field(default_factory=StatusRouteSettingsNode02)
 
     class Config:
@@ -45,7 +45,7 @@ class ClickhouseNode02(BaseSettings):
 
 
 class StatusRouteSettingsNode03(BaseSettings):
-    DISTRIBUTED_TABLE: str = Field(..., env="CH_STATUS_ROUTE_DISTRIBUTED_TABLE")
+    DISTRIBUTED_TABLE: str
     REPLICA_PATH: str
     REPLICA_NAME: str
 
@@ -58,7 +58,7 @@ class ClickhouseNode03(BaseSettings):
     PORT: int
     USER: str
     PASSWORD: str
-    CLUSTER: str = Field(..., env="CH_CLUSTER_NAME")
+    CLUSTER: str
     STATUS_ROUTE: BaseSettings = Field(default_factory=StatusRouteSettingsNode03)
 
     class Config:
@@ -66,7 +66,7 @@ class ClickhouseNode03(BaseSettings):
 
 
 class StatusRouteSettingsNode04(BaseSettings):
-    DISTRIBUTED_TABLE: str = Field(..., env="CH_STATUS_ROUTE_DISTRIBUTED_TABLE")
+    DISTRIBUTED_TABLE: str
     REPLICA_PATH: str
     REPLICA_NAME: str
 
@@ -79,7 +79,7 @@ class ClickhouseNode04(BaseSettings):
     PORT: int
     USER: str
     PASSWORD: str
-    CLUSTER: str = Field(..., env="CH_CLUSTER_NAME")
+    CLUSTER: str
     STATUS_ROUTE: BaseSettings = Field(default_factory=StatusRouteSettingsNode04)
 
     class Config:
@@ -87,7 +87,7 @@ class ClickhouseNode04(BaseSettings):
 
 
 class StatusRouteSettingsNode05(BaseSettings):
-    DISTRIBUTED_TABLE: str = Field(..., env="CH_STATUS_ROUTE_DISTRIBUTED_TABLE")
+    DISTRIBUTED_TABLE: str
     REPLICA_PATH: str
     REPLICA_NAME: str
 
@@ -100,7 +100,7 @@ class ClickhouseNode05(BaseSettings):
     PORT: int
     USER: str
     PASSWORD: str
-    CLUSTER: str = Field(..., env="CH_CLUSTER_NAME")
+    CLUSTER: str
     STATUS_ROUTE: BaseSettings = Field(default_factory=StatusRouteSettingsNode05)
 
     class Config:
@@ -108,7 +108,7 @@ class ClickhouseNode05(BaseSettings):
 
 
 class StatusRouteSettingsNode06(BaseSettings):
-    DISTRIBUTED_TABLE: str = Field(..., env="CH_STATUS_ROUTE_DISTRIBUTED_TABLE")
+    DISTRIBUTED_TABLE: str
     REPLICA_PATH: str
     REPLICA_NAME: str
 
@@ -121,7 +121,7 @@ class ClickhouseNode06(BaseSettings):
     PORT: int
     USER: str
     PASSWORD: str
-    CLUSTER: str = Field(..., env="CH_CLUSTER_NAME")
+    CLUSTER: str
     STATUS_ROUTE: BaseSettings = Field(default_factory=StatusRouteSettingsNode06)
 
     class Config:

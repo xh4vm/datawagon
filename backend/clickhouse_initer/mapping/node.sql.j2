@@ -11,8 +11,7 @@ CREATE TABLE IF NOT EXISTS datawood.status_route_queue
     speed                   Float64,
     num_railway_carriage    UInt8,
     status                  String,
-    railway_id              UUID,
-    datetime                DateTime
+    railway_id              UUID
 )
 ENGINE=Kafka()
 SETTINGS
@@ -32,7 +31,6 @@ CREATE TABLE IF NOT EXISTS datawood.status_route
     status                  String,
     speed                   Float64,
     num_railway_carriage    UInt8,
-    datetime                DateTime,
     created_at              DateTime  DEFAULT now()
 )
 Engine=ReplicatedMergeTree('{{ node.STATUS_ROUTE.REPLICA_PATH }}', '{{ node.STATUS_ROUTE.REPLICA_NAME }}')
@@ -42,11 +40,11 @@ ORDER BY (id);
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS datawood.status_route_consumer
 TO datawood.status_route
-AS SELECT railway_id, status, speed, datetime, tuple(geo.latitude, geo.longitude) as geo, generateUUIDv4() as id
+AS SELECT railway_id, status, speed, tuple(geo.latitude, geo.longitude) as geo, generateUUIDv4() as id
 FROM datawood.status_route_queue;
 
 
-CREATE TABLE IF NOT EXISTS {{ node.STATUS_ROUTE.DISTRIBUTED_TABLE }}
+CREATE TABLE IF NOT EXISTS default.{{ node.STATUS_ROUTE.DISTRIBUTED_TABLE }}
 (
     id                      UUID,
     train_id                UUID,
@@ -55,7 +53,6 @@ CREATE TABLE IF NOT EXISTS {{ node.STATUS_ROUTE.DISTRIBUTED_TABLE }}
     status                  String,
     speed                   Float64,
     num_railway_carriage    UInt8,
-    datetime                DateTime,
     created_at              DateTime  DEFAULT now()
 )
-ENGINE = Distributed('{{ node.CLUSTER }}', '', STATUS_ROUTE, rand());
+ENGINE = Distributed({{ node.CLUSTER }}, '', {{ node.STATUS_ROUTE.DISTRIBUTED_TABLE }}, rand());

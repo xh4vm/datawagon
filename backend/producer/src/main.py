@@ -17,7 +17,7 @@ from .core.config import CONFIG
 def register_di_containers():
     status_route_value_serializer = providers.Resource(
         JSONSerializerResource,
-        to_dict=lambda obj: obj.dict(),
+        to_dict=lambda obj: obj.model_dump(),
     )
     status_route_key_serializer = providers.Resource(StringSerializerResource, codec='utf-8')
 
@@ -37,7 +37,8 @@ def create_app():
 
     app = FastAPI(
         title=CONFIG.APP.PROJECT_NAME,
-        docs_url=f'{CONFIG.APP.API_PATH}{CONFIG.APP.SWAGGER_PATH}',
+        # docs_url=f'{CONFIG.APP.API_PATH}{CONFIG.APP.SWAGGER_PATH}',
+        redoc_url=f'{CONFIG.APP.API_PATH}/redoc',
         openapi_url=f'{CONFIG.APP.API_PATH}{CONFIG.APP.JSON_SWAGGER_PATH}',
         default_response_class=ORJSONResponse,
         middleware=middleware,
@@ -47,6 +48,7 @@ def create_app():
     register_di_containers()
 
     return app
+
 
 
 app = create_app()

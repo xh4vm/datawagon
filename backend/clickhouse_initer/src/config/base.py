@@ -1,7 +1,8 @@
 from typing import Any
 
 import backoff
-from pydantic import BaseSettings, Field
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
 
 class KafkaTopicsSettings(BaseSettings):

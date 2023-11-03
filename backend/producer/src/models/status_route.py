@@ -1,9 +1,10 @@
 import enum
 import uuid
-from pydantic import Field, validator
+from pydantic import validator
 from datetime import datetime as dt
 
 from .base import JSONModel
+from pydantic import BaseModel
 
 
 class StatusType(str, enum.Enum):
@@ -18,13 +19,13 @@ class Geo(JSONModel):
     longitude: float
 
 
-class RouteData(JSONModel):
+class RouteData(BaseModel):
     train_id: uuid.UUID
     railway_id: uuid.UUID
     num_railway_carriage: int
     speed: float
     status: StatusType
-    datetime: dt
+    # datetime: dt
     geo: Geo
 
     @validator('speed')

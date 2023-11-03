@@ -1,4 +1,3 @@
-from pydantic.main import ModelMetaclass
 from aiokafka import AIOKafkaProducer
 
 from .base import BaseProducer
@@ -19,7 +18,7 @@ class KafkaProducer(BaseProducer):
         await self.producer.stop()
 
     async def produce(
-        self, topic: str, key: str = None, value: ModelMetaclass = None, partition: int = None, timestamp: int = None
+        self, topic: str, key: str = None, value: type = None, partition: int = None, timestamp: int = None
     ) -> None:
 
         await self.producer.send_and_wait(
