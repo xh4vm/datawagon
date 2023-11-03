@@ -1,7 +1,7 @@
 x-base-service: &base_service
   env_file: .env
   networks:
-    - datawood
+    - datawagon
 
 x-redis: &base_redis
   image: redis:7.2.2-alpine
@@ -303,5 +303,5 @@ volumes:
   airflow-db:
 
 networks:
-  datawood:
+  datawagon:
     driver: bridge

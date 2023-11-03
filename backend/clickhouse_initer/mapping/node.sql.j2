@@ -1,9 +1,9 @@
 SET allow_experimental_geo_types=1;
 
-CREATE DATABASE IF NOT EXISTS datawood;
-CREATE DATABASE IF NOT EXISTS datawood_replica;
+CREATE DATABASE IF NOT EXISTS datawagon;
+CREATE DATABASE IF NOT EXISTS datawagon_replica;
 
-CREATE TABLE IF NOT EXISTS datawood.status_route_queue
+CREATE TABLE IF NOT EXISTS datawagon.status_route_queue
 (
     `geo.latitude`          Float64,
     `geo.longitude`         Float64,
@@ -23,7 +23,7 @@ kafka_format = 'JSONEachRow',
 input_format_import_nested_json=1;
 
 
-CREATE TABLE IF NOT EXISTS datawood.status_route
+CREATE TABLE IF NOT EXISTS datawagon.status_route
 (
     id                      UUID,
     train_id                UUID,
@@ -40,10 +40,10 @@ PARTITION BY toYYYYMMDD(created_at)
 ORDER BY (id);
 
 
-CREATE MATERIALIZED VIEW IF NOT EXISTS datawood.status_route_consumer
-TO datawood.status_route
+CREATE MATERIALIZED VIEW IF NOT EXISTS datawagon.status_route_consumer
+TO datawagon.status_route
 AS SELECT railway_id, status, speed, tuple(geo.latitude, geo.longitude) as geo, datetime, generateUUIDv4() as id
-FROM datawood.status_route_queue;
+FROM datawagon.status_route_queue;
 
 
 CREATE TABLE IF NOT EXISTS default.{{ node.STATUS_ROUTE.DISTRIBUTED_TABLE }}

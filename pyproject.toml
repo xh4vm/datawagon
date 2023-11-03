@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "datawood"
+name = "datawagon"
 version = "0.1.0"
 description = ""
 authors = ["xh4vm <h4vm@yandex.ru>"]
