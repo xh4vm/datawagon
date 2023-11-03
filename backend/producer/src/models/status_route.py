@@ -4,7 +4,7 @@ from pydantic import validator
 from datetime import datetime as dt
 
 from .base import JSONModel
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class StatusType(str, enum.Enum):
@@ -25,7 +25,6 @@ class RouteData(BaseModel):
     num_railway_carriage: int
     speed: float
     status: StatusType
-    # datetime: dt
     geo: Geo
 
     @validator('speed')
@@ -36,4 +35,4 @@ class RouteData(BaseModel):
         raise ValueError('"speed" must be greater than zero')
 
 class StatusRoute(RouteData):
-    pass
+    datetime: str = Field(default_factory=lambda: dt.now().strftime('%Y-%m-%d %H:%M:%S'))
