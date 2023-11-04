@@ -1,0 +1,12 @@
+backoff==2.1.2
+aiohttp==3.8.6
+aiokafka==0.8.1
+dependency_injector==4.41.0
+fastapi==0.104.1
+gunicorn==21.2.0
+orjson==3.9.10
+pydantic==2.4.2
+pydantic_settings==2.0.3
+uvicorn==0.23.2
+starlette-context==0.3.6
+loguru==0.7.2
