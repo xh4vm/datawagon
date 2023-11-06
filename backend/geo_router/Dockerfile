@@ -1,4 +1,4 @@
-FROM python:3.11-slim AS producer-builder
+FROM python:3.11-slim AS geo-router-builder
 
 WORKDIR /opt
 COPY requirements.txt ./
@@ -10,10 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc musl-dev li
 
 FROM python:3.11-slim
 
-COPY --from=producer-builder /opt /opt
-COPY --from=producer-builder /usr/lib/ /usr/lib/
+COPY --from=geo-router-builder /opt /opt
+COPY --from=geo-router-builder /usr/lib/ /usr/lib/
 
-WORKDIR /opt/producer
+WORKDIR /opt/geo_router
 ENTRYPOINT ["/bin/bash", "-c", "chmod +x ./start.sh && ./start.sh"]
 
 COPY . .

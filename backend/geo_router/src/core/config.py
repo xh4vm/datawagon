@@ -14,7 +14,7 @@ class AppSettings(BaseSettings):
     JSON_SWAGGER_PATH: str
 
     class Config:
-        env_prefix = 'PRODUCER_'
+        env_prefix = 'GEO_ROUTER_'
 
 
 class KafkaTopicsSettings(BaseSettings):

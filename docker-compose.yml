@@ -59,19 +59,19 @@ services:
     ports:
       - 80:80
 
-  producer:
+  geo_router:
     <<: *base_service
-    build: ./backend/producer
-    container_name: producer
+    build: ./backend/geo_router
+    container_name: geo_router
     env_file: .env
     profiles:
       - dev
     volumes:
-      - ./backend/producer:/opt/producer
+      - ./backend/geo_router:/opt/geo_router
     expose:
-      - ${PRODUCER_PORT}
+      - ${GEO_ROUTER_PORT}
     healthcheck:
-      test: curl http://producer:${PRODUCER_PORT} >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      test: curl http://geo_router:${GEO_ROUTER_PORT} >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
       interval: 30s
       timeout: 10s
       retries: 5

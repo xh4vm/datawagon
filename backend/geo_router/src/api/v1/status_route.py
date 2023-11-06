@@ -10,11 +10,11 @@ from src.core.config import CONFIG
 from src.models.status_route import StatusRoute, RouteData
 
 
-router = APIRouter(prefix='/route', tags=['Routes'])
-URL = f'{CONFIG.APP.HOST}:{CONFIG.APP.PORT}{CONFIG.APP.API_PATH}/{CONFIG.APP.API_VERSION}/route/status'
+router = APIRouter(prefix='/railway', tags=['Railway route API'])
+URL = f'{CONFIG.APP.HOST}:{CONFIG.APP.PORT}{CONFIG.APP.API_PATH}/{CONFIG.APP.API_VERSION}/railway/status'
 
 
-@router.post(path='/status', name='Produce status rail route')
+@router.post(path='/status', name='Produce status railway route')
 @inject
 async def status_route(
     status: RouteData,
