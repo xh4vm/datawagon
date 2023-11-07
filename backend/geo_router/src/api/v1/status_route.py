@@ -50,11 +50,11 @@ async def map_status_route(
                         'status': 'loaded',
                         'point': {
                             'start': {
-                                'title': 'Start station',
+                                'title': 'Звенигород',
                                 'geo': {'coordinates': [37.5362099,55.7668608], 'type': 'Point'}
                             },
                             'end': {
-                                'title': 'Start station',
+                                'title': 'Дмитров',
                                 'geo': {'coordinates': [37.5347034,55.7611376], 'type': 'Point'}
                             },
                         },
@@ -110,11 +110,11 @@ async def map_status_route(
                         'status': 'loaded',
                         'point': {
                             'start': {
-                                'title': 'Start station',
+                                'title': 'Звенигород',
                                 'geo': {'coordinates': [37.5362099,55.7668608], 'type': 'Point'}
                             },
                             'end': {
-                                'title': 'End station',
+                                'title': 'Дмитров',
                                 'geo': {'coordinates': [37.5347034,55.7611376], 'type': 'Point'}
                             },
                         },
@@ -131,11 +131,11 @@ async def map_status_route(
                         'status': 'loaded',
                         'point': {
                             'start': {
-                                'title': 'Start station',
+                                'title': 'Звенигород',
                                 'geo': {'coordinates': [37.5362099,55.7668608], 'type': 'Point'}
                             },
                             'end': {
-                                'title': 'Start station',
+                                'title': 'Дмитров',
                                 'geo': {'coordinates': [37.5347034,55.7611376], 'type': 'Point'}
                             },
                         },
