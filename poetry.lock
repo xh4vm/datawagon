@@ -280,6 +280,17 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
+name = "certifi"
+version = "2023.7.22"
+description = "Python package for providing Mozilla's CA Bundle."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "certifi-2023.7.22-py3-none-any.whl", hash = "sha256:92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9"},
+    {file = "certifi-2023.7.22.tar.gz", hash = "sha256:539cc1d13202e33ca466e88b2807e29f4c13049d6d87031a3c110744495cb082"},
+]
+
+[[package]]
 name = "charset-normalizer"
 version = "3.3.2"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
@@ -1012,6 +1023,37 @@ files = [
 ]
 
 [[package]]
+name = "osmium"
+version = "3.6.0"
+description = "Python bindings for libosmium, the data processing library for OSM data"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "osmium-3.6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:0520d39797c17030c11427213421237aa17f327b076c5367dd2721e856a8aab7"},
+    {file = "osmium-3.6.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e46615d9761f49ae86b7f891c1e00a7e010b85622d17d956029299407b86b0cb"},
+    {file = "osmium-3.6.0-cp310-cp310-win_amd64.whl", hash = "sha256:ae26ef88d386ba57eece0b577d61d58f70688f04f4366265001fe63f0d0da1ac"},
+    {file = "osmium-3.6.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:844a614a39435ab6d20ae136feda9b57acd15f062b8177321ec3343610d12dd7"},
+    {file = "osmium-3.6.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:184bb9dc6938db2e0f08cf4f33fd1d1d35fa106c9a71bb5f060967110d701bf3"},
+    {file = "osmium-3.6.0-cp311-cp311-win_amd64.whl", hash = "sha256:6ecd7f036bf89e69e67aa1f8ed4fa1b5997307c7586a17e793b250cdcb8e7a0f"},
+    {file = "osmium-3.6.0-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:10a40a6803cfa964e9ec34bb701c5f1466e37d77fa2fac93531dc2ba80651602"},
+    {file = "osmium-3.6.0-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2156805e83122e9bcfce43b789c53fc2460cc021e4cde04c065b18ac540e176d"},
+    {file = "osmium-3.6.0-cp36-cp36m-win_amd64.whl", hash = "sha256:7665829f16ecea783e037ef2ed6c983909ce48ea7b0e7fdff4fbc23159a27368"},
+    {file = "osmium-3.6.0-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:b45c06943982e2da8e2c710ed555b074f293b2349da1ca526c8b9db6bdf06a3c"},
+    {file = "osmium-3.6.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:131f882871e1b49d33e2258f5ea5e65b383b56cb24521b7c488d6a1763dcf8fb"},
+    {file = "osmium-3.6.0-cp37-cp37m-win_amd64.whl", hash = "sha256:569b9206bf99b8157a578ccbbccfc1eedfeb7ea685db69542101f459304be4fb"},
+    {file = "osmium-3.6.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:755c2baaf87148a55167e6357c7f6461c583a29d365bc36f97bdab5829ccd6f4"},
+    {file = "osmium-3.6.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:84bda7074dcfbd83019bb30787c5bcf20411707b8ec7a550c3fbacbaba41ed19"},
+    {file = "osmium-3.6.0-cp38-cp38-win_amd64.whl", hash = "sha256:866c76bc816cd3dceab9a1cf1ff158762dba659cfac24f704aa9796facf5c6b8"},
+    {file = "osmium-3.6.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:11e7a930cc7ac7afedd6d77d267b1899942a0236ff4351e1ba1f9f228789dee1"},
+    {file = "osmium-3.6.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bb99685d18f08e766ba8d971a7f93a3bfb2829b917996591a7cfec053c2711b3"},
+    {file = "osmium-3.6.0-cp39-cp39-win_amd64.whl", hash = "sha256:360bf9b30ed995e3d3e359eada5c3690c850eb1453a699c739a2f45a5d8c4ee4"},
+    {file = "osmium-3.6.0.tar.gz", hash = "sha256:c7b4becb5f13aa82421b269e583bee4d14b56a2c490b334d44ec954cb480a289"},
+]
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "packaging"
 version = "23.2"
 description = "Core utilities for Python packages"
@@ -1226,6 +1268,27 @@ files = [
 ]
 
 [[package]]
+name = "requests"
+version = "2.31.0"
+description = "Python HTTP for Humans."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "requests-2.31.0-py3-none-any.whl", hash = "sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f"},
+    {file = "requests-2.31.0.tar.gz", hash = "sha256:942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1"},
+]
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+charset-normalizer = ">=2,<4"
+idna = ">=2.5,<4"
+urllib3 = ">=1.21.1,<3"
+
+[package.extras]
+socks = ["PySocks (>=1.5.6,!=1.5.7)"]
+use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1316,6 +1379,23 @@ tzdata = {version = "*", markers = "platform_system == \"Windows\""}
 
 [package.extras]
 devenv = ["check-manifest", "pytest (>=4.3)", "pytest-cov", "pytest-mock (>=3.3)", "zest.releaser"]
+
+[[package]]
+name = "urllib3"
+version = "2.0.7"
+description = "HTTP library with thread-safe connection pooling, file post, and more."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "urllib3-2.0.7-py3-none-any.whl", hash = "sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e"},
+    {file = "urllib3-2.0.7.tar.gz", hash = "sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84"},
+]
+
+[package.extras]
+brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
+secure = ["certifi", "cryptography (>=1.9)", "idna (>=2.0.0)", "pyopenssl (>=17.1.0)", "urllib3-secure-extra"]
+socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
+zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "uvicorn"
@@ -1439,4 +1519,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "8dff040cda47e4e9cbb207e012a1d2b488c10a87432b7bc4f7383c909a9dad9f"
+content-hash = "6fb58a3a6e5000171c1a53cfb2a34c39480f4cd54d01bbf34f13c052b9753713"
