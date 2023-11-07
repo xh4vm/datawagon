@@ -4,7 +4,9 @@ from pydantic import validator
 from datetime import datetime as dt
 
 from .base import JSONModel
+from .datetime import RangeDateTime
 from pydantic import BaseModel, Field
+from typing import Any
 
 
 class StatusType(str, enum.Enum):
@@ -53,5 +55,39 @@ class RouteData(BaseModel):
 
         raise ValueError('"num_railway_carriage" must be greater than zero')
 
+
 class StatusRoute(RouteData):
     datetime: str = Field(default_factory=lambda: dt.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+
+class WagonType(enum.Enum):
+    DANGER = 'danger'
+
+
+class WagonStatus(enum.Enum):
+    LOADED = 'loaded'
+
+
+class Point(JSONModel):
+    title: str
+    geo: dict[str, Any]
+
+
+class WagonData(JSONModel):
+    id: uuid.UUID
+    number: int
+    netto: int
+    status: WagonStatus
+    type: WagonType
+    points: list[Point]
+    datetime: RangeDateTime
+
+
+class TrainData(JSONModel):
+    id: uuid.UUID
+    wagon_counts: int
+    netto: int
+    brutto: int
+    wagons: list[WagonData]
+    route: dict[str, Any]
+    railway: dict[str, Any]
