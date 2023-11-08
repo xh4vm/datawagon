@@ -33,8 +33,8 @@ class WagonData(JSONModel):
     ])
     datetime: RangeDateTime = Field(description='Временные точки выполнения заказа', examples=[
         {
-            'start': '2023-11-07 12:20:43',
-            'end': '2023-11-17 12:20:43'
+            'start': '2023-11-07',
+            'end': '2023-11-17'
         }
     ])
 
@@ -45,7 +45,7 @@ class TrainData(JSONModel):
     netto: int = Field(description='Масса нетто поезда', examples=[1000000])
     brutto: int = Field(description='Масса брутто поезда', examples=[1000000000])
     wagons: list[WagonData]
-    route: list[tuple[float]] = Field(description='Статус пройденных поездом точек', examples=[[
+    route: list[tuple[float, float]] = Field(description='Статус пройденных поездом точек', examples=[[
         [37.5362099,55.7668608],[37.536251,55.7671476],[37.5362921,55.7674066],[37.5363579,55.7676733],[37.5364319,55.7679137],[37.5365223,55.7681727]
     ]])
     railway: GeoJSONType = Field(description='Статус пройденных поездом точек', examples=[{
