@@ -43,6 +43,7 @@ class Train(UUIDMixin, TimeStampedMixin):
 
 
 class Node(UUIDMixin, TimeStampedMixin):
+    osm_id = models.CharField(_("osm_id"), max_length=64, blank=False, null=False)
     title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
     role = models.CharField(_("role"), max_length=128, blank=True, null=True)
     location = models.PointField(_("location"), blank=False, null=False)
@@ -54,6 +55,7 @@ class Node(UUIDMixin, TimeStampedMixin):
 
 
 class Railway(UUIDMixin, TimeStampedMixin):
+    osm_id = models.CharField(_("osm_id"), max_length=64, blank=False, null=False)
     title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
     title_from = models.CharField(_("title_from"), max_length=512, blank=True, null=True)
     title_to = models.CharField(_("title_to"), max_length=512, blank=True, null=True)

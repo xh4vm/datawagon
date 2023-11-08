@@ -3,6 +3,7 @@ CREATE SCHEMA IF NOT EXISTS content;
 
 CREATE TABLE IF NOT EXISTS content.nodes (
     id UUID PRIMARY KEY,
+    osm_id TEXT,
     title TEXT,
     location geometry(POINT, 4326),
     role TEXT,
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS content.nodes (
 
 CREATE TABLE IF NOT EXISTS content.railways (
     id UUID PRIMARY KEY,
+    osm_id TEXT,
     title TEXT,
     geo geometry(MULTILINESTRING, 4326),
     title_from TEXT,

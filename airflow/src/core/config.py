@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import backoff
 from pydantic import Field
@@ -15,7 +15,7 @@ class PostgresSettings(BaseSettings):
     class Config:
         env_prefix = "DB_"
 
-    def dsl(self) -> Dict[str, Any]:
+    def dsl(self) -> dict[str, Any]:
         return {
             "dbname": self.NAME,
             "user": self.USER,
@@ -177,6 +177,20 @@ class ClickhouseNode06(BaseSettings):
         env_prefix = "CLICKHOUSE_NODE06_"
 
 
+class GeofabrikSettings(BaseSettings):
+    URL: str
+    
+    class Config:
+        env_prefix = "GEOFABRIK_"
+
+
+class OSMSettings(BaseSettings):
+    FILE: str
+    
+    class Config:
+        env_prefix = "OSM_"
+
+
 NODES = [
     ClickhouseNode01(),
     ClickhouseNode02(),
@@ -190,9 +204,10 @@ CLICKHOUSE_CONFIG: ClickhouseSettings = ClickhouseSettings()
 
 REDIS_CONFIG = RedisSettings()
 POSTGRES_CONFIG = PostgresSettings()
+GEOFABRIK_CONFIG = GeofabrikSettings()
+OSM_CONFIG = OSMSettings() 
 
-
-BACKOFF_CONFIG: Dict[str, Any] = {
+BACKOFF_CONFIG: dict[str, Any] = {
     "wait_gen": backoff.expo,
     "exception": Exception,
     "max_value": 8,
