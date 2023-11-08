@@ -1,12 +1,9 @@
 import enum
 import uuid
-from pydantic import validator
+from pydantic import validator, BaseModel, Field
 from datetime import datetime as dt
 
-from .base import JSONModel
-from .datetime import RangeDateTime
-from pydantic import BaseModel, Field
-from typing import Any
+from .geo import Geo
 
 
 class StatusType(str, enum.Enum):
@@ -14,25 +11,6 @@ class StatusType(str, enum.Enum):
     STOPPED = 'stopped'
     FINISHED = 'finished'
     PROCESSING = 'processing'
-
-
-class Geo(JSONModel):
-    latitude: float
-    longitude: float
-
-    @validator('latitude')
-    def latitude_ge_zero(cls, value: float) -> float:
-        if value >= 0:
-            return value
-
-        raise ValueError('"latitude" must be greater than zero')
-    
-    @validator('longitude')
-    def longitude_ge_zero(cls, value: float) -> float:
-        if value >= 0:
-            return value
-
-        raise ValueError('"longitude" must be greater than zero')
 
 
 class RouteData(BaseModel):
@@ -58,36 +36,3 @@ class RouteData(BaseModel):
 
 class StatusRoute(RouteData):
     datetime: str = Field(default_factory=lambda: dt.now().strftime('%Y-%m-%d %H:%M:%S'))
-
-
-class WagonType(enum.Enum):
-    DANGER = 'danger'
-
-
-class WagonStatus(enum.Enum):
-    LOADED = 'loaded'
-
-
-class Point(JSONModel):
-    title: str
-    geo: dict[str, Any]
-
-
-class WagonData(JSONModel):
-    id: uuid.UUID
-    number: int
-    netto: int
-    status: WagonStatus
-    type: WagonType
-    points: list[Point]
-    datetime: RangeDateTime
-
-
-class TrainData(JSONModel):
-    id: uuid.UUID
-    wagon_counts: int
-    netto: int
-    brutto: int
-    wagons: list[WagonData]
-    route: dict[str, Any]
-    railway: dict[str, Any]
