@@ -29,7 +29,7 @@ define log
 endef
 
 .PHONY: interactive build dev services
-dev: poetry-install-build-dev build-dockers-dev
+dev: poetry-install-build-dev collectstatic build-dockers-dev
 
 .PHONY: clean all docker images and pyc-files
 clean-all: clean-pyc clean-all-dockers
@@ -63,3 +63,8 @@ clean-all-dockers:
 black:
 	$(call log,Run black linter)
 	poetry run black --check ./
+
+.PHONY: collect static files
+collectstatic:
+	$(call log,Django collect static)
+	poetry run python3 backend/admin/manage.py collectstatic --noinput

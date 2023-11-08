@@ -1,0 +1,15 @@
+aiohttp==3.8.3
+backoff==2.2.1
+python-decouple==3.7
+loguru==0.6.0
+pydantic==2.4.2
+pydantic_settings==2.0.3
+orjson==3.9.10
+python-dotenv==1.0.0
+clickhouse_driver==0.2.6
+openpyxl==3.1.2
+redis==3.5.3
+psycopg2-binary==2.9.6
+celery==5.3.4
+apache-airflow-providers-celery==3.4.1
+sh==2.0.6

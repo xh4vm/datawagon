@@ -1,4 +1,4 @@
-backoff==2.1.2
+backoff==2.2.1
 aiohttp==3.8.6
 aiokafka==0.8.1
 dependency_injector==4.41.0
