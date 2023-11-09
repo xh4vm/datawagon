@@ -1,25 +1,23 @@
-from typing import Any
-from pydantic import Field
-
 from .base import JSONModel, UUIDModelMixin, TimeStampedModelMixin
 
 
-class GeoJSONType(JSONModel):
-    type: str = Field(description='Тип GeoJSON', examples=['Point'])
-    coordinates: list[Any] = Field(description='Координаты GeoJSON', examples=[[37.5362099,55.7668608]])
-
-
-class Node(JSONModel, UUIDModelMixin, TimeStampedModelMixin):
-    osm_id: str
+class NodeData(JSONModel, UUIDModelMixin, TimeStampedModelMixin):
+    osm_id: int
     title: str
-    location: GeoJSONType
+    location: str
     role: str
 
 
-class Railway(JSONModel, UUIDModelMixin, TimeStampedModelMixin):
-    osm_id: str
+class RailwayData(JSONModel, UUIDModelMixin, TimeStampedModelMixin):
+    osm_id: int
     title: str
-    geo: GeoJSONType
-    title_from: str
-    title_to: str
-    network: str
+    geo: str
+    title_from: str | None
+    title_to: str | None
+    operator: str | None
+    network: str | None
+
+
+class RailwayNodeData(JSONModel, UUIDModelMixin, TimeStampedModelMixin):
+    node_osm_id: int
+    railway_osm_id: int | None

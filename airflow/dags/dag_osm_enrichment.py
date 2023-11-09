@@ -35,5 +35,4 @@ osm_enrichment = PythonOperator(
     dag=dag_osm_enrichment,
 )
 
-osm_enrichment
-# geofabrik_download > osm_enrichment
+geofabrik_download >> osm_enrichment

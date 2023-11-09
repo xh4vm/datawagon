@@ -7,3 +7,4 @@ class Schema:
     WAGONS = "wagons"
     NODES = "nodes"
     RAILWAYS = "railways"
+    RAILWAY_NODES = "railway_nodes"

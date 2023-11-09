@@ -43,7 +43,7 @@ class Train(UUIDMixin, TimeStampedMixin):
 
 
 class Node(UUIDMixin, TimeStampedMixin):
-    osm_id = models.CharField(_("osm_id"), max_length=64, blank=False, null=False)
+    osm_id = models.BigIntegerField(_("osm_id"), blank=False, null=False, unique=True)
     title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
     role = models.CharField(_("role"), max_length=128, blank=True, null=True)
     location = models.PointField(_("location"), blank=False, null=False)
@@ -53,12 +53,16 @@ class Node(UUIDMixin, TimeStampedMixin):
         verbose_name = _("Node")
         verbose_name_plural = _("Nodes")
 
+    def __str__(self):
+        return self.title
+
 
 class Railway(UUIDMixin, TimeStampedMixin):
-    osm_id = models.CharField(_("osm_id"), max_length=64, blank=False, null=False)
+    osm_id = models.BigIntegerField(_("osm_id"), blank=False, null=False, unique=True)
     title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
     title_from = models.CharField(_("title_from"), max_length=512, blank=True, null=True)
     title_to = models.CharField(_("title_to"), max_length=512, blank=True, null=True)
+    operator = models.CharField(_("operator"), max_length=512, blank=True, null=True)
     network = models.CharField(_("network"), max_length=512, blank=True, null=True)
     geo = models.MultiLineStringField(_("geo"), blank=False, null=False)
 
@@ -66,3 +70,30 @@ class Railway(UUIDMixin, TimeStampedMixin):
         db_table = 'content"."railways'
         verbose_name = _("Railway")
         verbose_name_plural = _("Railways")
+
+    def __str__(self):
+        return self.title
+
+
+class RailwayNode(UUIDMixin, TimeStampedMixin):
+    node_osm_id = models.ForeignKey(
+        "Node", 
+        null=True, blank=True,
+        to_field='osm_id',
+        db_column='node_osm_id',
+        on_delete=models.CASCADE,
+        verbose_name=_("Node"),
+    )
+    railway_osm_id = models.ForeignKey(
+        "Railway",
+        null=True, blank=True,
+        to_field='osm_id',
+        db_column='railway_osm_id',
+        on_delete=models.CASCADE,
+        verbose_name=_("Railway"),
+    )
+
+    class Meta:
+        db_table = 'content"."railway_nodes'
+        verbose_name = _("RailwayNode")
+        verbose_name_plural = _("RailwayNodes")

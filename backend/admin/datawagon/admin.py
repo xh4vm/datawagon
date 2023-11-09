@@ -2,7 +2,7 @@ from django.contrib.gis import admin
 from django.db.models import F, Prefetch
 from django.utils.translation import gettext_lazy as _
 
-from .models import Train, Wagon, Node, Railway
+from .models import Train, Wagon, Node, Railway, RailwayNode
 
 
 class WagonInline(admin.TabularInline):
@@ -26,13 +26,13 @@ class TrainAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
 
-        network_prefetch = Prefetch(
+        wagon_prefetch = Prefetch(
             "train_wagon",
             to_attr="_wagons",
             queryset=(Wagon.objects.all()),
         )
 
-        return queryset.prefetch_related(network_prefetch)
+        return queryset.prefetch_related(wagon_prefetch)
 
 
 class CustomGeoWidgetAdmin(admin.GISModelAdmin):
@@ -55,3 +55,9 @@ class NodeAdmin(CustomGeoWidgetAdmin):
 class RailwayAdmin(CustomGeoWidgetAdmin):
     list_display = ("title", "title_from", "title_to", "network", "geo",)
     search_fields = ("title", "title_from", "title_to", "network",)
+
+
+@admin.register(RailwayNode)
+class RailwayNodeAdmin(admin.ModelAdmin):
+    list_display = ("id", "node_osm_id", "railway_osm_id",)
+    search_fields = ("id", "node_osm_id", "railway_osm_id",)

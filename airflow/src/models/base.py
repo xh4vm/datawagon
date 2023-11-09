@@ -17,7 +17,7 @@ class JSONModel(BaseModel):
 
 
 class UUIDModelMixin(BaseModel):
-    id: uuid.UUID
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, nullable=False)
 
 
 class TimeStampedModelMixin(BaseModel):

@@ -186,6 +186,7 @@ class GeofabrikSettings(BaseSettings):
 
 class OSMSettings(BaseSettings):
     FILE: str
+    BACKUP_FILE: str
     
     class Config:
         env_prefix = "OSM_"

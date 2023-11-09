@@ -37,7 +37,7 @@ class PostgresLoader(BaseLoader):
         self, into_statement: list[str], data: type
     ) -> tuple[Any]:
         try:
-            data_as_dict: dict[str, Any] = data.dict()
+            data_as_dict: dict[str, Any] = data.model_dump()
         except:
             logger.error("Oops")
         return tuple(data_as_dict[key] for key in into_statement)
@@ -55,7 +55,7 @@ class PostgresLoader(BaseLoader):
         insert_query: str = (
             f"INSERT INTO {self._schema}.{schema_name}"
             f'({", ".join(into_statement)}) '
-            f"VALUES %s ON CONFLICT (id) DO NOTHING"
+            f"VALUES %s ON CONFLICT (id) DO NOTHING "
         )
 
         self._multiple_insert(
@@ -90,14 +90,20 @@ class PostgresLoader(BaseLoader):
 
             logger.error(f"Error stack or flush data! Message: {err}")
             raise err
+        
+    def _truncate(self, schema_name: str) -> None:
+        self._cursor.execute(f"TRUNCATE TABLE {self._schema}.{schema_name};")
 
-    def load(self, data: Iterator[dict[str, Any]]):
+    def load(self, data: Iterator[dict[str, Any]], truncate_before: bool = False):
         logger.info("Start saving all data to PostgreSQL database instance.")
 
-        for _data in data:
-            for schema_name in self._metadata.keys():
-                for obj in _data[schema_name]:
-                    self._stack_or_flush_all_data(obj, schema_name)
+        for schema_name in self._metadata.keys():
+
+            if truncate_before:
+                self._truncate(schema_name=schema_name)
+
+            for obj in data[schema_name]:
+                self._stack_or_flush_all_data(obj, schema_name)
 
         for schema_name in self._metadata.keys():
             self._stack_or_flush_all_data(
