@@ -37,8 +37,59 @@ x-base-clickhouse-node: &base-clickhouse-node
     timeout: 10s
     retries: 5
 
+x-airflow-common: &airflow-common
+  build: ./airflow
+  environment: &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASSWORD}@airflow-db/${AIRFLOW_DB_NAME}
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASSWORD}@airflow-db/${AIRFLOW_DB_NAME}
+    AIRFLOW__CELERY__BROKER_URL: redis://:${REDIS_PASSWORD}@redis:${REDIS_PORT}/0
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/src:/opt/airflow/src
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/data:/opt/airflow/data
+    - ./backups:/tmp/backups
+  user: "${AIRFLOW_UID:-50000}:0"
+  env_file: .env
+  depends_on: &airflow-common-depends-on
+    redis:
+      condition: service_healthy
+    airflow-db:
+      condition: service_healthy
+
+x-airflow-worker: &airflow-worker
+  command: celery worker
+  healthcheck:
+    test:
+      - 'CMD-SHELL'
+      - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+    interval: 10s
+    timeout: 10s
+    retries: 5
+  restart: always
+
 
 services:
+
+  admin: 
+    <<: *base_service
+    build: ./backend/admin
+    container_name: admin
+    env_file: .env
+    profiles: 
+      - dev
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./backend/admin:/opt/admin
+      - ./backend/admin/static:/var/www/static:ro
+    expose:
+      - ${ADMIN_APP_PORT}
 
   nginx:
     <<: *base_service
@@ -51,6 +102,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/admin/static:/var/www/admin/static:ro
       - ./nginx/configs:/etc/nginx/conf.d:ro
       - ./nginx/static/errors:/var/www/errors/:ro
       - ./nginx/static/log/udp_error_log:/var/log/nginx/udp_error.log:rw
@@ -59,19 +111,57 @@ services:
     ports:
       - 80:80
 
-  producer:
+  db:
     <<: *base_service
-    build: ./backend/producer
-    container_name: producer
+    image: postgis/postgis:16-3.4-alpine
+    hostname: db
+    container_name: db
+    env_file: .env
+    profiles:
+      - dev
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - ${DB_PORT}:5432
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${DB_USER} -D ${DB_NAME} > /dev/null; if [[ $$? == 0 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  pg-initer:
+    <<: *base_service
+    build: ./backend/pg_initer
+    container_name: pg-initer
+    restart: on-failure
+    profiles:
+      - dev
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./backend/pg_initer/schema.sql:/opt/pg_initer/src/schema.sql:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  geo_router:
+    <<: *base_service
+    build: ./backend/geo_router
+    container_name: geo_router
     env_file: .env
     profiles:
       - dev
     volumes:
-      - ./backend/producer:/opt/producer
+      - ./backend/geo_router:/opt/geo_router
     expose:
-      - ${PRODUCER_PORT}
+      - ${GEO_ROUTER_PORT}
     healthcheck:
-      test: curl http://producer:${PRODUCER_PORT} >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      test: curl http://geo_router:${GEO_ROUTER_PORT} >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
       interval: 30s
       timeout: 10s
       retries: 5
@@ -294,11 +384,109 @@ services:
       - clickhouse-node03
       - clickhouse-node05
 
+  airflow-db:
+    <<: *base_service
+    image: postgres:13-alpine
+    container_name: airflow-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${AIRFLOW_DB_USER}
+      - POSTGRES_PASSWORD=${AIRFLOW_DB_PASSWORD}
+      - POSTGRES_DB=${AIRFLOW_DB_NAME}
+    profiles: 
+      - dev
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - airflow-db:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${AIRFLOW_DB_USER} -D ${AIRFLOW_DB_NAME} > /dev/null; if [[ $$? == 0 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  airflow-webserver:
+    <<: *base_service
+    <<: *airflow-common
+    container_name: airflow-webserver
+    command: webserver
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://airflow-webserver:${AIRFLOW_PORT}/airflow/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./airflow/config/airflow.cfg:/opt/airflow/airflow.cfg
+    profiles: 
+      - dev
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-scheduler:
+    <<: *base_service
+    <<: *airflow-common
+    container_name: airflow-scheduler
+    command: scheduler
+    healthcheck:
+      test: ['CMD-SHELL', 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    profiles: 
+      - dev
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-worker01:
+    <<: *base_service
+    <<: *airflow-common
+    <<: *airflow-worker
+    container_name: airflow-worker01
+    profiles: 
+      - dev
+    env_file: .env
+    environment:
+      <<: *airflow-common-env
+      DUMB_INIT_SETSID: "0"
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-init:
+    <<: *base_service
+    <<: *airflow-common
+    container_name: airflow-init
+    entrypoint: /bin/bash
+    command: [ "-c", "chmod +x /opt/airflow/entrypoint_airflow.sh && /opt/airflow/entrypoint_airflow.sh" ]
+    profiles: 
+      - dev
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+    depends_on:
+      <<: *airflow-common-depends-on
+    user: "0:0"
+    volumes:
+      - ./airflow:/sources
+
 
 volumes:
   kafka01-data:
   kafka02-data:
   kafka03-data:
+  postgres-data:
   redis-data:
   airflow-db:
 

@@ -138,3 +138,6 @@ commands.md
 .DS_Store
 *.idea
 *._cache
+backups/
+logs/
+geofabrik/
