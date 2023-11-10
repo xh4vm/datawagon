@@ -1469,6 +1469,26 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-autocomplete-light"
+version = "3.9.7"
+description = "Fresh autocompletes for Django"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-autocomplete-light-3.9.7.tar.gz", hash = "sha256:a34f192ac438c4df056dbfd399550799ddc631c4661960134ded924648770373"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+six = "*"
+
+[package.extras]
+genericm2m = ["django-generic-m2m"]
+gfk = ["django-querysetsequence (>=0.11)"]
+nested = ["django-nested-admin (>=3.0.21)"]
+tags = ["django-taggit"]
+
+[[package]]
 name = "django-cors-headers"
 version = "4.3.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -1496,6 +1516,23 @@ files = [
 [package.dependencies]
 django = ">=3.2.4"
 sqlparse = ">=0.2"
+
+[[package]]
+name = "django-dynamic-admin-forms"
+version = "2.1.1"
+description = "Add simple dynamic interaction to the otherwise static django admin."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django_dynamic_admin_forms-2.1.1-py2.py3-none-any.whl", hash = "sha256:2b0ac553fccb96272fa340954c0659425cdfe10d9c604872fe43dd9a3d7647bd"},
+    {file = "django_dynamic_admin_forms-2.1.1.tar.gz", hash = "sha256:7832d5b7030c4036ba47fe70318bea753f30f1762c1be034c9a8e11f980c8e3c"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+
+[package.extras]
+dev = ["ambient-package-update (>=23.10.7,<23.11.0)", "coverage (>=7.3,<8.0)", "freezegun (>=1.2,<2.0)", "m2r2 (==0.3.1)", "mistune (<2.0.0)", "pre-commit (>=3.5,<4.0)", "pytest-django (>=4.5,<5.0)", "pytest-mock (>=3.10,<4.0)", "ruff (>=0.1,<1.0)", "sphinx (==4.2.0)", "sphinx-rtd-theme (==1.0.0)", "unittest-parametrize (>=1.4,<2.0)"]
 
 [[package]]
 name = "django-rest-framework"
@@ -5022,4 +5059,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "52adec43b99660dbb3974258037623da45963d411572055b538dc065b8fc7f74"
+content-hash = "786440ced8896cc605215dc8118f079dcff59e29a82da998e51fcf92f4c1bec4"

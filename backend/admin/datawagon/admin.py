@@ -1,38 +1,9 @@
-from django.contrib.gis import admin
+from django.contrib.gis import admin, forms
 from django.db.models import F, Prefetch
 from django.utils.translation import gettext_lazy as _
+from dal import autocomplete
 
-from .models import Train, Wagon, Node, Railway, RailwayNode
-
-
-class WagonInline(admin.TabularInline):
-    model = Wagon
-
-
-@admin.register(Wagon)
-class WagonAdmin(admin.ModelAdmin):
-    list_display = ("train_id", "number")
-    search_fields = ("number",)
-
-
-@admin.register(Train)
-class TrainAdmin(admin.ModelAdmin):
-    search_fields = ()
-    list_display = ()
-    list_filter = ()
-
-    inlines = (WagonInline,)
-
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-
-        wagon_prefetch = Prefetch(
-            "train_wagon",
-            to_attr="_wagons",
-            queryset=(Wagon.objects.all()),
-        )
-
-        return queryset.prefetch_related(wagon_prefetch)
+from .models import Train, Wagon, Node, Railway, RailwayNode, Waybill
 
 
 class CustomGeoWidgetAdmin(admin.GISModelAdmin):
@@ -61,3 +32,57 @@ class RailwayAdmin(CustomGeoWidgetAdmin):
 class RailwayNodeAdmin(admin.ModelAdmin):
     list_display = ("id", "node_osm_id", "railway_osm_id",)
     search_fields = ("id", "node_osm_id", "railway_osm_id",)
+
+
+class RailwayForm(forms.ModelForm):
+    class Meta:
+        model = Railway
+        fields = ('__all__')
+        widgets = {
+            'title': autocomplete.ModelSelect2(url='railway-autocomplete')
+        }
+
+
+class RailwayInline(admin.TabularInline):
+    model = Train.railways.through
+    form = RailwayForm
+
+
+class WagonInline(admin.TabularInline):
+    model = Wagon
+
+
+@admin.register(Wagon)
+class WagonAdmin(admin.ModelAdmin):
+    list_display = ("train_id", "number")
+    search_fields = ("number",)
+
+
+@admin.register(Train)
+class TrainAdmin(admin.ModelAdmin):
+    list_display = ("get_railway_title",)
+    search_fields = ("get_railway_title",)
+
+    inlines = (RailwayInline,)
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+
+        railway_prefetch = Prefetch(
+            "railways",
+            to_attr="_railway",
+            queryset=(Railway.objects.all()),
+        )
+
+        return queryset.prefetch_related(railway_prefetch)
+    
+    @admin.display(description=_('Railway title'))
+    def get_railway_title(self, train):
+        return '; '.join([railway.title for railway in train._railway])
+
+
+@admin.register(Waybill)
+class WaybillAdmin(CustomGeoWidgetAdmin):
+    list_display = ("number", "start_node_id", "finish_node_id", "geo",)
+    search_fields = ("number", "start_node_id", "finish_node_id",)
+    autocomplete_fields = ("start_node_id", "finish_node_id",)

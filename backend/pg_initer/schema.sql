@@ -45,3 +45,21 @@ CREATE TABLE IF NOT EXISTS content.trains (
     created_at TIMESTAMP WITH TIME ZONE,
     updated_at TIMESTAMP WITH TIME ZONE
 );
+
+CREATE TABLE IF NOT EXISTS content.waybills (
+    id UUID PRIMARY KEY,
+    number TEXT,
+    start_node_id UUID,
+    finish_node_id UUID,
+    geo geometry(MULTILINESTRING, 4326),
+    created_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS content.train_railways (
+    id UUID PRIMARY KEY,
+    train_id UUID,
+    railway_id UUID,
+    created_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE
+);

@@ -36,10 +36,32 @@ class Wagon(UUIDMixin, TimeStampedMixin):
 
 class Train(UUIDMixin, TimeStampedMixin):
 
+    railways = models.ManyToManyField('Railway', related_name='trains', through='TrainRailway')
+
     class Meta:
         db_table = 'content"."trains'
         verbose_name = _("Train")
-        verbose_name_plural = _("Train")
+        verbose_name_plural = _("Trains")
+
+
+class TrainRailway(UUIDMixin, TimeStampedMixin):
+    train = models.ForeignKey(
+        "Train", 
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=_("Train"),
+    )
+    railway = models.ForeignKey(
+        "Railway",
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=_("Railway"),
+    )
+
+    class Meta:
+        db_table = 'content"."train_railways'
+        verbose_name = _("TrainRailway")
+        verbose_name_plural = _("TrainRailways")
 
 
 class Node(UUIDMixin, TimeStampedMixin):
@@ -97,3 +119,41 @@ class RailwayNode(UUIDMixin, TimeStampedMixin):
         db_table = 'content"."railway_nodes'
         verbose_name = _("RailwayNode")
         verbose_name_plural = _("RailwayNodes")
+
+
+class Waybill(UUIDMixin, TimeStampedMixin):
+    number = models.CharField(_("number"), max_length=4096, blank=False, null=False)
+    start_node_id = models.ForeignKey(
+        "Node", 
+        null=True, blank=False,
+        to_field='id',
+        db_column='start_node_id',
+        on_delete=models.CASCADE,
+        related_name='start_waybill',
+        verbose_name=_("Start node"),
+    )
+    finish_node_id = models.ForeignKey(
+        "Node", 
+        null=True, blank=False,
+        to_field='id',
+        db_column='finish_node_id',
+        on_delete=models.CASCADE,
+        related_name='finish_waybill',
+        verbose_name=_("Finish node"),
+    )
+    geo = models.MultiLineStringField(_("geo"), blank=False, null=False)
+
+    @property
+    def geo(self):
+        railways = Railway.objects.filter(geo__contains=self.start_node_id.location).filter(geo__contains=self.finish_node_id.location).all()
+
+        if len(railways) == 0:
+            raise ValueError("Путь между станция не найден")
+
+        return railways
+
+
+    class Meta:
+        db_table = 'content"."waybills'
+        verbose_name = _("Waybill")
+        verbose_name_plural = _("Waybills")

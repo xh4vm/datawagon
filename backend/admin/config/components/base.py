@@ -10,6 +10,9 @@ DEBUG = os.environ.get("DEBUG", False) == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 
 INSTALLED_APPS = [
+    "datawagon.apps.DatawagonConfig",
+    "dal",
+    "dal_select2",
     "rest_framework",
     "django.contrib.admin",
     "django.contrib.gis",
@@ -18,7 +21,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "datawagon.apps.DatawagonConfig",
     "debug_toolbar",
     "corsheaders",
 ]
