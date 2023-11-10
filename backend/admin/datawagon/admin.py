@@ -33,15 +33,13 @@ class RailwayNodeAdmin(admin.ModelAdmin):
     list_display = ("id", "node_osm_id", "railway_osm_id",)
     search_fields = ("id", "node_osm_id", "railway_osm_id",)
 
-
 class RailwayForm(forms.ModelForm):
     class Meta:
         model = Railway
-        fields = ('__all__')
+        fields = ('title',)
         widgets = {
-            'title': autocomplete.ModelSelect2(url='railway-autocomplete')
+            'title': autocomplete.ModelSelect2(url='select2_fk')
         }
-
 
 class RailwayInline(admin.TabularInline):
     model = Train.railways.through
@@ -62,6 +60,7 @@ class WagonAdmin(admin.ModelAdmin):
 class TrainAdmin(admin.ModelAdmin):
     list_display = ("get_railway_title",)
     search_fields = ("get_railway_title",)
+    form = RailwayForm
 
     inlines = (RailwayInline,)
 
