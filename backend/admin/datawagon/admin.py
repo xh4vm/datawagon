@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import Train, Wagon, Node, Railway, RailwayNode
 
 
+
 class WagonInline(admin.TabularInline):
     model = Wagon
 
@@ -17,22 +18,10 @@ class WagonAdmin(admin.ModelAdmin):
 
 @admin.register(Train)
 class TrainAdmin(admin.ModelAdmin):
-    search_fields = ()
-    list_display = ()
-    list_filter = ()
+    search_fields = ("title",)
+    list_display = ("title",)
 
     inlines = (WagonInline,)
-
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-
-        wagon_prefetch = Prefetch(
-            "train_wagon",
-            to_attr="_wagons",
-            queryset=(Wagon.objects.all()),
-        )
-
-        return queryset.prefetch_related(wagon_prefetch)
 
 
 class CustomGeoWidgetAdmin(admin.GISModelAdmin):
@@ -47,8 +36,8 @@ class CustomGeoWidgetAdmin(admin.GISModelAdmin):
 
 @admin.register(Node)
 class NodeAdmin(CustomGeoWidgetAdmin):
-    list_display = ("title", "role", "location")
-    search_fields = ("title", "role",)
+    list_display = ("title", "role", "location", "station_id")
+    search_fields = ("title", "role", "station_id",)
 
 
 @admin.register(Railway)

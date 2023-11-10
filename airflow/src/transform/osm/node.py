@@ -1,8 +1,6 @@
 import pandas as pd
 from typing import Iterator, Any
-from loguru import logger
 from shapely import to_geojson
-from shapely.geometry import Point
 
 from src.transform.base import BaseTransformer
 from src.models.osm import NodeData
@@ -18,6 +16,7 @@ class NodeTransformer(BaseTransformer):
                 osm_id=raw_elem[1]['n_id'],
                 title=raw_elem[1]['name'],
                 location=to_geojson(raw_elem[1]['geo']),
-                role=raw_elem[1]['railway']
+                role=raw_elem[1]['railway'],
+                station_id=raw_elem[1].get('st_id')
             )
             yield elem.model_dump() if to_dict else elem

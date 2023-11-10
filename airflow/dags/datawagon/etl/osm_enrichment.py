@@ -20,7 +20,7 @@ def run():
 
     node_data = node_transformer.transform(nodes=nodes)
     railway_data = railway_transformer.transform(ways=ways, members=relation_members, relations=relations)
-    railway_node_data = railway_node_transformer.transform(nodes=nodes, members=relation_members)
+    railway_node_data = railway_node_transformer.transform(members=relation_members)
 
     loader = PostgresLoader(
         settings=POSTGRES_CONFIG,

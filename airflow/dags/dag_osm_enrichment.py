@@ -22,11 +22,11 @@ dag_osm_enrichment = DAG(
 )
 
 
-geofabrik_download = PythonOperator(
-    python_callable=run_geofabrik_download,
-    task_id="geofabrik_download",
-    dag=dag_osm_enrichment,
-)
+# geofabrik_download = PythonOperator(
+#     python_callable=run_geofabrik_download,
+#     task_id="geofabrik_download",
+#     dag=dag_osm_enrichment,
+# )
 
 
 osm_enrichment = PythonOperator(
@@ -35,4 +35,5 @@ osm_enrichment = PythonOperator(
     dag=dag_osm_enrichment,
 )
 
-geofabrik_download >> osm_enrichment
+osm_enrichment
+# geofabrik_download >> osm_enrichment
