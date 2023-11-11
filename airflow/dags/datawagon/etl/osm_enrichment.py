@@ -1,3 +1,4 @@
+import os
 from src.extract.osm_pbf import OSMPBFExtractor
 from src.core.config import OSM_CONFIG, POSTGRES_CONFIG
 from src.utils.osm.handlers.railway import RailwayHandler
