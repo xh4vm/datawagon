@@ -13,7 +13,7 @@ def run():
     file_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'org_data', 'partial_results.csv')
 
     handler = RailwayHandler()
-    extractor = OSMPBFExtractor(handler=handler, osm_config=OSM_CONFIG)
+    extractor = OSMPBFExtractor(handler=handler, osm_config=OSM_CONFIG, csv_file_path=file_path)
     
     node_transformer = NodeTransformer()
     railway_transformer = RailwayTransformer()
