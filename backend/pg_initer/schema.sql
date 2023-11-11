@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS content.nodes (
     title TEXT,
     location geometry(POINT, 4326),
     role TEXT,
+    station_id BIGINT,
     created_at TIMESTAMP WITH TIME ZONE,
     updated_at TIMESTAMP WITH TIME ZONE
 );
@@ -15,6 +16,23 @@ CREATE TABLE IF NOT EXISTS content.railway_nodes (
     id UUID PRIMARY KEY,
     node_osm_id BIGINT,
     railway_osm_id BIGINT,
+    created_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS content.railway_way (
+    id UUID PRIMARY KEY,
+    way_osm_id BIGINT,
+    railway_osm_id BIGINT,
+    created_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS content.ways (
+    id UUID PRIMARY KEY,
+    osm_id BIGINT,
+    geo geometry(LINESTRING, 4326),
+    length INTEGER,
     created_at TIMESTAMP WITH TIME ZONE,
     updated_at TIMESTAMP WITH TIME ZONE
 );
@@ -42,6 +60,7 @@ CREATE TABLE IF NOT EXISTS content.wagons (
 
 CREATE TABLE IF NOT EXISTS content.trains (
     id UUID PRIMARY KEY,
+    title TEXT,
     created_at TIMESTAMP WITH TIME ZONE,
     updated_at TIMESTAMP WITH TIME ZONE
 );

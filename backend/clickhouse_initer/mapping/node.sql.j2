@@ -5,14 +5,15 @@ CREATE DATABASE IF NOT EXISTS datawagon_replica;
 
 CREATE TABLE IF NOT EXISTS datawagon.status_route_queue
 (
-    `geo.latitude`          Float64,
-    `geo.longitude`         Float64,
-    train_id                UUID,
-    speed                   Float64,
-    num_railway_carriage    UInt8,
-    status                  String,
-    datetime                DateTime,
-    railway_id              UUID
+    wagnum                  UInt64,
+    st_id_disl              UInt64,
+    st_id_dest              UInt64,
+    train_st_start          UInt64,
+    train_st_end            UInt64,
+    train_st_num            UInt64,
+    train_index             String,
+    operdate                DateTime,
+    datetime                DateTime
 )
 ENGINE=Kafka()
 SETTINGS
@@ -26,12 +27,14 @@ input_format_import_nested_json=1;
 CREATE TABLE IF NOT EXISTS datawagon.status_route
 (
     id                      UUID,
-    train_id                UUID,
-    railway_id              UUID,
-    geo                     Point,
-    status                  String,
-    speed                   Float64,
-    num_railway_carriage    UInt8,
+    wagnum                  UInt64,
+    st_id_disl              UInt64,
+    st_id_dest              UInt64,
+    train_st_start          UInt64,
+    train_st_end            UInt64,
+    train_st_num            UInt64,
+    train_index             String,
+    operdate                DateTime,
     datetime                DateTime,
     created_at              DateTime  DEFAULT now()
 )
@@ -42,19 +45,21 @@ ORDER BY (id);
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS datawagon.status_route_consumer
 TO datawagon.status_route
-AS SELECT railway_id, status, speed, tuple(geo.latitude, geo.longitude) as geo, datetime, generateUUIDv4() as id
+AS SELECT wagnum, st_id_disl, st_id_dest, train_st_start, train_st_end, train_st_num, train_index, operdate, datetime, generateUUIDv4() as id
 FROM datawagon.status_route_queue;
 
 
 CREATE TABLE IF NOT EXISTS default.{{ node.STATUS_ROUTE.DISTRIBUTED_TABLE }}
 (
     id                      UUID,
-    train_id                UUID,
-    railway_id              UUID,
-    geo                     Point,
-    status                  String,
-    speed                   Float64,
-    num_railway_carriage    UInt8,
+    wagnum                  UInt64,
+    st_id_disl              UInt64,
+    st_id_dest              UInt64,
+    train_st_start          UInt64,
+    train_st_end            UInt64,
+    train_st_num            UInt64,
+    train_index             String,
+    operdate                DateTime,
     datetime                DateTime,
     created_at              DateTime  DEFAULT now()
 )

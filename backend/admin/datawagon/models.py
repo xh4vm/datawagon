@@ -28,6 +28,9 @@ class Wagon(UUIDMixin, TimeStampedMixin):
     )
     number = models.IntegerField(_("number"), blank=True, null=True)
 
+    def __str__(self):
+        return f'{self.number}'
+
     class Meta:
         db_table = 'content"."wagons'
         verbose_name = _("Wagon")
@@ -35,6 +38,8 @@ class Wagon(UUIDMixin, TimeStampedMixin):
 
 
 class Train(UUIDMixin, TimeStampedMixin):
+
+    title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
 
     class Meta:
         db_table = 'content"."trains'
@@ -47,6 +52,7 @@ class Node(UUIDMixin, TimeStampedMixin):
     title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
     role = models.CharField(_("role"), max_length=128, blank=True, null=True)
     location = models.PointField(_("location"), blank=False, null=False)
+    station_id = models.BigIntegerField(_("station_id"), blank=True, null=True, editable=False)
 
     class Meta:
         db_table = 'content"."nodes'
@@ -55,6 +61,17 @@ class Node(UUIDMixin, TimeStampedMixin):
 
     def __str__(self):
         return self.title
+
+
+class Way(UUIDMixin, TimeStampedMixin):
+    osm_id = models.BigIntegerField(_("osm_id"), blank=False, null=False, unique=True)
+    length = models.IntegerField(_("length"), blank=True, null=True)
+    geo = models.MultiLineStringField(_("geo"), blank=False, null=False)
+
+    class Meta:
+        db_table = 'content"."ways'
+        verbose_name = _("Way")
+        verbose_name_plural = _("Ways")
 
 
 class Railway(UUIDMixin, TimeStampedMixin):
@@ -97,3 +114,27 @@ class RailwayNode(UUIDMixin, TimeStampedMixin):
         db_table = 'content"."railway_nodes'
         verbose_name = _("RailwayNode")
         verbose_name_plural = _("RailwayNodes")
+
+
+class RailwayWay(UUIDMixin, TimeStampedMixin):
+    way_osm_id = models.ForeignKey(
+        "Way", 
+        null=True, blank=True,
+        to_field='osm_id',
+        db_column='way_osm_id',
+        on_delete=models.CASCADE,
+        verbose_name=_("Way"),
+    )
+    railway_osm_id = models.ForeignKey(
+        "Railway",
+        null=True, blank=True,
+        to_field='osm_id',
+        db_column='railway_osm_id',
+        on_delete=models.CASCADE,
+        verbose_name=_("Railway"),
+    )
+
+    class Meta:
+        db_table = 'content"."railway_ways'
+        verbose_name = _("RailwayWay")
+        verbose_name_plural = _("RailwayWays")

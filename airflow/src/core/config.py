@@ -191,6 +191,13 @@ class OSMSettings(BaseSettings):
     class Config:
         env_prefix = "OSM_"
 
+    
+class HackathonSettings(BaseSettings):
+    DISL_PATH: str
+    
+    class Config:
+        env_prefix = "HACKATHON_"
+
 
 NODES = [
     ClickhouseNode01(),
@@ -202,6 +209,8 @@ NODES = [
 ]
 
 CLICKHOUSE_CONFIG: ClickhouseSettings = ClickhouseSettings()
+
+HACKATHON_CONFIG: HackathonSettings = HackathonSettings()
 
 REDIS_CONFIG = RedisSettings()
 POSTGRES_CONFIG = PostgresSettings()
