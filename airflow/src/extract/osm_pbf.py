@@ -17,7 +17,7 @@ class OSMPBFExtractor(BaseExtractor):
         csv_data = pd.read_csv(self.csv_file_path)
 
         # Проверка наличия столбцов
-        required_columns = {'node_osm_id', 'ST_ID'}
+        required_columns = {'OSM_ID', 'ST_ID'}
         if not required_columns.issubset(csv_data.columns):
             missing_columns = required_columns - set(csv_data.columns)
             raise ValueError(f"Отсутствуют обязательные столбцы: {missing_columns}")
