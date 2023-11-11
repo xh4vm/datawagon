@@ -16,6 +16,7 @@ class NodeTransformer(BaseTransformer):
 
             elem = NodeData(
                 osm_id=raw_elem[1]['n_id'],
+                st_id= raw_elem[1]['ST_ID'],
                 title=raw_elem[1]['name'],
                 location=to_geojson(raw_elem[1]['geo']),
                 role=raw_elem[1]['railway']
