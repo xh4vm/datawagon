@@ -2,7 +2,7 @@ from typing import Optional, Type
 
 from dependency_injector import containers, providers
 
-from ..services.producer.base import BaseProducer
+from src.services.producer.base import BaseProducer
 
 
 class ServiceFactory(providers.Factory):

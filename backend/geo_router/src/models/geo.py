@@ -1,4 +1,5 @@
 from pydantic import Field, validator
+from datetime import datetime
 from typing import Any
 
 from .base import JSONModel
@@ -30,4 +31,7 @@ class GeoJSONType(JSONModel):
 
 class GeoPoint(JSONModel):
     title: str = Field(description='Имя гео точки', examples=['Дмитров'])
-    geo: GeoJSONType
+    geo: dict
+
+class GeoPointOperdate(GeoPoint):
+    operdate: datetime

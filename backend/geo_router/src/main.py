@@ -8,7 +8,8 @@ from starlette_context.middleware import RawContextMiddleware
 from .resources.json_serializer import JSONSerializerResource
 from .resources.string_serializer import StringSerializerResource
 
-from .containers.status_route import ServiceContainer as StatusRouteServiceContainer
+from .containers.extractor.clickhouse_postgres import ServiceContainer as ClickhousePostgresServiceContainer
+from .containers.producer.kafka import ServiceContainer as KafkaProducerServiceContainer
 
 from .api.v1.status_route import router as status_route_router
 from .core.config import CONFIG
@@ -21,9 +22,11 @@ def register_di_containers():
     )
     status_route_key_serializer = providers.Resource(StringSerializerResource, codec='utf-8')
 
-    StatusRouteServiceContainer(
+    KafkaProducerServiceContainer(
         key_serializer=status_route_key_serializer, value_serializer=status_route_value_serializer
     )
+
+    ClickhousePostgresServiceContainer()
 
 
 def register_routers(app: FastAPI):

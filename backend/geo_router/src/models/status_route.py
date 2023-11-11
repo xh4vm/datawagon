@@ -1,38 +1,33 @@
-import enum
-import uuid
 from pydantic import validator, BaseModel, Field
 from datetime import datetime as dt
 
-from .geo import Geo
-
-
-class StatusType(str, enum.Enum):
-    STARTING = 'starting'
-    STOPPED = 'stopped'
-    FINISHED = 'finished'
-    PROCESSING = 'processing'
-
 
 class RouteData(BaseModel):
-    train_id: uuid.UUID
-    railway_id: uuid.UUID
-    num_railway_carriage: int
-    speed: float
-    status: StatusType
-    geo: Geo
+    wagnum: int
+    operdate: str = Field(default_factory=lambda: dt.now().strftime('%Y-%m-%d %H:%M:%S'))
+    st_id_disl: int
+    st_id_dest: int
+    train_index: str
 
-    @validator('speed')
-    def speed_ge_zero(cls, value: float) -> float:
-        if value >= 0:
+    @validator('operdate')
+    def operdate_validate(cls, value: str) -> str:
+        if isinstance(dt.strptime(value, '%Y-%m-%d %H:%M:%S'), dt):
             return value
-        
-    @validator('num_railway_carriage')
-    def num_ge_zero(cls, value: float) -> float:
-        if value >= 0:
-            return value
-
-        raise ValueError('"num_railway_carriage" must be greater than zero')
 
 
 class StatusRoute(RouteData):
+    train_st_start: int
+    train_st_num: int
+    train_st_end: int
     datetime: str = Field(default_factory=lambda: dt.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+    def __init__(self, train_index: str, **kwargs) -> None:
+        train_st_start, train_st_num, train_st_end = train_index.split('-')
+        print('AAAA', train_st_start, train_st_num, train_st_end)
+        super().__init__(
+            train_index=train_index,
+            train_st_start=train_st_start,
+            train_st_num=train_st_num,
+            train_st_end=train_st_end,
+            **kwargs
+        )
