@@ -23,3 +23,7 @@ class UUIDModelMixin(BaseModel):
 class TimeStampedModelMixin(BaseModel):
     created_at: datetime = Field(default=datetime.utcnow(), nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+
+
+class CreatedModelMixin(BaseModel):
+    created_at: datetime = Field(default=datetime.utcnow(), nullable=False)

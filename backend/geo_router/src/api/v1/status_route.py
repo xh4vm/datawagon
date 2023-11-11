@@ -1,11 +1,8 @@
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 import geopandas as gpd
-import pandas as pd
-import numpy as np
 import orjson
 from shapely import MultiPoint, to_geojson
-from shapely.ops import split,snap
 
 from src.containers.producer.kafka import ServiceContainer as KafkaProducerServiceContainer
 from src.containers.extractor.clickhouse_postgres import ServiceContainer as ClickhousePostgresServiceContainer
@@ -39,10 +36,10 @@ async def status_route(
 @router.get(path='/status', name='Получение информации об активных поездах')
 @inject
 async def map_status_route(
-    # x1: float,
-    # x2: float,
-    # y1: float,
-    # y2: float,
+    x1: float,
+    x2: float,
+    y1: float,
+    y2: float,
     ch_extractor: ClickhouseExtractor = Depends(Provide[ClickhousePostgresServiceContainer.clickhouse_service]),
     pg_extractor: PostgresExtractor = Depends(Provide[ClickhousePostgresServiceContainer.postgres_service])
 ) -> dict[str, TrainData]:
@@ -57,26 +54,26 @@ async def map_status_route(
         # )
         # logger.info(railways_df)
 
-        # railways_df = pg_extractor.extract(
-        #     ('SELECT * from content.railways '
-        #      'WHERE ST_Intersects( '
-        #     f'ST_MakeEnvelope({min(x1, x2)}, {min(y1, y2)}, {max(x1, x2)}, {max(y1, y2)}, 4326), '
-        #     f'geo)')
-        # )
         railways_df = pg_extractor.extract(
-            ('SELECT * from content.railways ')
+            ('SELECT * from content.railways '
+             'WHERE ST_Intersects( '
+            f'ST_MakeEnvelope({min(x1, x2)}, {min(y1, y2)}, {max(x1, x2)}, {max(y1, y2)}, 4326), '
+            f'geo)')
         )
+        # railways_df = pg_extractor.extract(
+        #     ('SELECT * from content.railways ')
+        # )
         railways_df['geo'] = gpd.GeoSeries.from_wkb(railways_df['geo'])
         railways_gdf = gpd.GeoDataFrame(railways_df, geometry='geo')
 
-        # station_df = pg_extractor.extract(
-        #     (f'SELECT station_id, location from content.nodes WHERE ST_Contains( '
-        #     f'ST_MakeEnvelope({min(x1, x2)}, {min(y1, y2)}, {max(x1, x2)}, {max(y1, y2)}, 4326), '
-        #     f'location)')
-        # )
         station_df = pg_extractor.extract(
-            (f'SELECT station_id, title, location from content.nodes')
+            (f'SELECT station_id, location from content.nodes WHERE ST_Contains( '
+            f'ST_MakeEnvelope({min(x1, x2)}, {min(y1, y2)}, {max(x1, x2)}, {max(y1, y2)}, 4326), '
+            f'location)')
         )
+        # station_df = pg_extractor.extract(
+        #     (f'SELECT station_id, title, location from content.nodes')
+        # )
         station_df['location'] = gpd.GeoSeries.from_wkb(station_df['location'])
         station_gdf = gpd.GeoDataFrame(station_df, geometry='location')
 
@@ -85,9 +82,21 @@ async def map_status_route(
     if len(visible_station) == 0:
         return []
     
+    join_str = ", ".join(visible_station)
+
     status_route_df = ch_extractor.extract(
-        ('SELECT wagnum, train_index, train_st_start, train_st_end, train_st_num, groupArray(st_id_disl) as disl_ids, groupArray(map(\'operdate\', toString(operdate), \'st_id_disl\', toString(st_id_disl))) as disls, st_id_dest FROM default.status_route '
+        ('SELECT wagnum, train_index, train_st_start, train_st_end, train_st_num, groupArray(st_id_disl) as disl_ids, groupArray(map(\'operdate\', toString(operdate), \'st_id_disl\', toString(st_id_disl))) as disls, st_id_dest FROM default.status_route WHERE '
+        f'train_st_start IN ({join_str}) OR '
+        f'train_st_end IN ({join_str}) OR '
+        f'st_id_disl IN ({join_str}) OR '
+        f'st_id_dest IN ({join_str}) '
         f'GROUP BY train_index, train_st_start, train_st_end, train_st_num, wagnum, st_id_dest')
+        
+        # ('SELECT wagnum, train_index, train_st_start, train_st_end, train_st_num, groupArray(st_id_disl) as disl_ids, groupArray(map(\'operdate\', toString(operdate), \'st_id_disl\', toString(st_id_disl))) as disls, st_id_dest FROM default.status_route '
+        # f'GROUP BY train_index, train_st_start, train_st_end, train_st_num, wagnum, st_id_dest')
+
+        # ('SELECT wagnum, train_index, train_st_start, train_st_end, train_st_num, groupArray(st_id_disl) as disl_ids, st_id_dest FROM default.status_route '
+        # f'GROUP BY train_index, train_st_start, train_st_end, train_st_num, wagnum, st_id_dest')
     )
 
     result = {}
@@ -103,15 +112,18 @@ async def map_status_route(
         ].location.tolist()
 
         multipoint = MultiPoint(locations)
-        
+
         railway_df = railways_gdf[
             railways_gdf.contains(multipoint)
         ]
 
+        if railway_df.size == 0:
+            continue
+
         railway = railway_df.iloc[0].to_dict()
         railway['geo'] = to_geojson(railway['geo'])
 
-        disls = {disl['st_id_disl']: station_gdf[station_gdf.station_id == int(disl['st_id_disl'])].iloc[0].to_dict() for disl in status_route['disls']}
+        disls = {disl['st_id_disl']: station_gdf[station_gdf.station_id == int(disl['st_id_disl'])].iloc[0].to_dict() for disl in status_route['disls'] if station_gdf[station_gdf.station_id == int(disl['st_id_disl'])].size > 0}
 
         wagon = WagonData(
             number=status_route.wagnum,
@@ -119,7 +131,7 @@ async def map_status_route(
                 operdate=disl['operdate'],
                 title=disls[disl['st_id_disl']].get('title'),
                 geo=orjson.loads(to_geojson(disls[disl['st_id_disl']].get('location')))
-            ) for disl in status_route['disls']]
+            ) for disl in status_route['disls'] if disl['st_id_disl'] in disls]
         )
 
         if status_route.train_index in result:

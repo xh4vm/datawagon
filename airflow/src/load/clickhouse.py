@@ -1,12 +1,12 @@
-from typing import Any
+from typing import Optional, Iterator, Any
 
 import backoff
 import pandas as pd
 from loguru import logger
 from clickhouse_driver import Client as Clickhouse
 
-from src.core.config import BACKOFF_CONFIG, NODES
-from .base import BaseExtractor
+from src.core.config import BACKOFF_CONFIG
+from src.load.base import BaseLoader
 
 
 def ch_conn_is_alive(ch_conn: Clickhouse) -> bool:
@@ -17,24 +17,24 @@ def ch_conn_is_alive(ch_conn: Clickhouse) -> bool:
         return False
 
 
-class ClickhouseExtractor(BaseExtractor):
+class ClickhouseLoader(BaseLoader):
     def __init__(
         self,
-        host: str = NODES[0].HOST,
-        port: int = NODES[0].PORT,
-        user: str = NODES[0].USER,
-        password: str  = NODES[0].PASSWORD,
-        alt_hosts: list[str] | None = [f'{NODE.HOST}:{NODE.PORT}' for NODE in NODES],
-        conn: Clickhouse | None = None,
-        settings: dict[str, Any] | None = None,
+        host: str,
+        port: int,
+        user: str = "default",
+        password: str = "",
+        alt_hosts: Optional[list[str]] = None,
+        conn: Optional[Clickhouse] = None,
+        settings: Optional[dict[str, Any]] = None,
     ) -> None:
         self._conn: Clickhouse = conn
         self._host: str = host
-        self._alt_hosts: list[str] | None = alt_hosts
+        self._alt_hosts: Optional[list[str]] = alt_hosts
         self._port: int = port
         self._user: str = user
         self._password: str = password
-        self._settings: dict[str, Any] | None = settings
+        self._settings: Optional[dict[str, Any]] = settings
 
     @property
     def conn(self) -> Clickhouse:
@@ -61,5 +61,10 @@ class ClickhouseExtractor(BaseExtractor):
         )
 
     # @backoff.on_exception(**BACKOFF_CONFIG, logger=logger)
-    def extract(self, query: str) -> pd.DataFrame:
-        return self.conn.query_dataframe(query)
+    def load(self, data: Iterator[type], table: str) -> int | None:
+        # df = pd.DataFrame(data)
+
+        logger.info(self.conn.execute("SHOW DATABASES"))
+
+        # logger.info(df.head(2).to_dict())
+        return self.conn.execute(f"INSERT INTO {table} VALUES ", (_.model_dump() for _ in data))

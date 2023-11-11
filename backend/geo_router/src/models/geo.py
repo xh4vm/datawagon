@@ -30,7 +30,7 @@ class GeoJSONType(JSONModel):
 
 
 class GeoPoint(JSONModel):
-    title: str = Field(description='Имя гео точки', examples=['Дмитров'])
+    title: str | None = Field(description='Имя гео точки', examples=['Дмитров'], default=None)
     geo: dict
 
 class GeoPointOperdate(GeoPoint):

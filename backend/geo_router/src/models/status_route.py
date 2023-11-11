@@ -4,7 +4,7 @@ from datetime import datetime as dt
 
 class RouteData(BaseModel):
     wagnum: int
-    operdate: str = Field(default_factory=lambda: dt.now().strftime('%Y-%m-%d %H:%M:%S'))
+    operdate: str
     st_id_disl: int
     st_id_dest: int
     train_index: str
@@ -23,7 +23,6 @@ class StatusRoute(RouteData):
 
     def __init__(self, train_index: str, **kwargs) -> None:
         train_st_start, train_st_num, train_st_end = train_index.split('-')
-        print('AAAA', train_st_start, train_st_num, train_st_end)
         super().__init__(
             train_index=train_index,
             train_st_start=train_st_start,
