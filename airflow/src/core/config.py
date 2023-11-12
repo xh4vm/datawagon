@@ -201,6 +201,8 @@ NODES = [
     ClickhouseNode06(),
 ]
 
+LOCAL_ORG_DATA_FILE: str = ""
+
 CLICKHOUSE_CONFIG: ClickhouseSettings = ClickhouseSettings()
 
 REDIS_CONFIG = RedisSettings()
