@@ -10,10 +10,7 @@ from .base import BaseExtractor
 
 
 class PostgresExtractor(BaseExtractor):
-    def __init__(
-        self,
-        settings: PostgresSettings = POSTGRES
-    ):
+    def __init__(self, settings: PostgresSettings = POSTGRES):
         self._settings = settings
         self.conn = None
 

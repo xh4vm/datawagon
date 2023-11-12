@@ -10,7 +10,7 @@ from src.transform.osm.node import NodeTransformer, NodeData
 
 
 def run():
-    FILES = OSM_CONFIG.FILES.split(',')
+    FILES = OSM_CONFIG.FILES.split(",")
 
     node_transformer = NodeTransformer()
     railway_transformer = RailwayTransformer()
@@ -28,16 +28,26 @@ def run():
 
     for FILE in FILES:
         handler = RailwayHandler()
-        extractor = OSMPBFExtractor(handler=handler, osm_file=FILE, csv_file_path=HACKATHON_CONFIG.PARTIAL_RESULTS_PATH)
-        
+        extractor = OSMPBFExtractor(
+            handler=handler,
+            osm_file=FILE,
+            csv_file_path=HACKATHON_CONFIG.PARTIAL_RESULTS_PATH,
+        )
+
         nodes, ways, relation_members, relations = extractor.extract()
 
         node_data = node_transformer.transform(nodes=nodes)
-        railway_data = railway_transformer.transform(ways=ways, members=relation_members, relations=relations)
+        railway_data = railway_transformer.transform(
+            ways=ways, members=relation_members, relations=relations
+        )
         railway_node_data = railway_node_transformer.transform(members=relation_members)
 
         with loader:
             loader.load(
-                {Schema.NODES: node_data, Schema.RAILWAYS: railway_data, Schema.RAILWAY_NODES: railway_node_data},
-                truncate_before=True
+                {
+                    Schema.NODES: node_data,
+                    Schema.RAILWAYS: railway_data,
+                    Schema.RAILWAY_NODES: railway_node_data,
+                },
+                truncate_before=True,
             )

@@ -6,12 +6,8 @@ from src.models.osm import RailwayNodeData
 
 
 class RailwayNodeTransformer(BaseTransformer):
-    def transform(
-        self, members: pd.DataFrame, to_dict: bool = False
-    ) -> Iterator[Any]:
-
-        for raw_elem in members[members.type == 'n'].iterrows():
-
+    def transform(self, members: pd.DataFrame, to_dict: bool = False) -> Iterator[Any]:
+        for raw_elem in members[members.type == "n"].iterrows():
             elem = RailwayNodeData(
                 node_osm_id=raw_elem[1]["ref"],
                 railway_osm_id=raw_elem[1]["r_id"],

@@ -7,13 +7,10 @@ from src.models.osm import WayData
 
 
 class WayTransformer(BaseTransformer):
-    def transform(
-        self, ways: pd.DataFrame, to_dict: bool = False
-    ) -> Iterator[Any]:
+    def transform(self, ways: pd.DataFrame, to_dict: bool = False) -> Iterator[Any]:
         for raw_elem in ways.iterrows():
-
             elem = WayData(
-                osm_id=raw_elem[1]['w_id'],
-                geo=to_geojson(raw_elem[1]['geo']),
+                osm_id=raw_elem[1]["w_id"],
+                geo=to_geojson(raw_elem[1]["geo"]),
             )
             yield elem.model_dump() if to_dict else elem

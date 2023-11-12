@@ -8,11 +8,10 @@ class RangeDateTime(JSONModel):
     start: str
     end: str
 
-    @validator('start')
+    @validator("start")
     def start_format(cls, value: str) -> datetime:
-        return datetime.strptime(value, '%Y-%m-%d')
+        return datetime.strptime(value, "%Y-%m-%d")
 
-
-    @validator('end')
+    @validator("end")
     def end_format(cls, value: str) -> datetime:
-        return datetime.strptime(value, '%Y-%m-%d')
+        return datetime.strptime(value, "%Y-%m-%d")

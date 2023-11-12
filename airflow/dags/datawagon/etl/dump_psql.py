@@ -22,4 +22,3 @@ def run():
         fd.write(content.encode())
 
     logger.info(f'[+] Success finished dump "{POSTGRES_CONFIG.NAME}" database')
-    

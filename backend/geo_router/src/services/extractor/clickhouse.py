@@ -23,8 +23,8 @@ class ClickhouseExtractor(BaseExtractor):
         host: str = NODES[0].HOST,
         port: int = NODES[0].PORT,
         user: str = NODES[0].USER,
-        password: str  = NODES[0].PASSWORD,
-        alt_hosts: list[str] | None = [f'{NODE.HOST}:{NODE.PORT}' for NODE in NODES],
+        password: str = NODES[0].PASSWORD,
+        alt_hosts: list[str] | None = [f"{NODE.HOST}:{NODE.PORT}" for NODE in NODES],
         conn: Clickhouse | None = None,
         settings: dict[str, Any] | None = None,
     ) -> None:

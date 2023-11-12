@@ -6,7 +6,7 @@ from src.transform.disl import DislTransformer
 
 def run():
     extractor = ExcelExtractor(path=HACKATHON_CONFIG.DISL_PATH)
-    
+
     disl_transformer = DislTransformer()
 
     disls_df = extractor.extract()
@@ -18,7 +18,7 @@ def run():
         port=NODES[2].PORT,
         user=NODES[2].USER,
         password=NODES[2].PASSWORD,
-        alt_hosts=[f'{NODE.HOST}:{NODE.PORT}' for NODE in NODES]
+        alt_hosts=[f"{NODE.HOST}:{NODE.PORT}" for NODE in NODES],
     )
 
-    loader.load(data=disls_data, table='status_route')
+    loader.load(data=disls_data, table="status_route")

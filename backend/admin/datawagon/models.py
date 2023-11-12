@@ -11,6 +11,7 @@ class TimeStampedMixin(models.Model):
     class Meta:
         abstract = True
 
+
 class UUIDMixin(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
 
@@ -20,8 +21,9 @@ class UUIDMixin(models.Model):
 
 class Wagon(UUIDMixin, TimeStampedMixin):
     train = models.ForeignKey(
-        "Train", 
-        null=True, blank=True,
+        "Train",
+        null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name="wagons",
         verbose_name=_("Train"),
@@ -29,7 +31,7 @@ class Wagon(UUIDMixin, TimeStampedMixin):
     number = models.IntegerField(_("number"), blank=True, null=True)
 
     def __str__(self):
-        return f'{self.number}'
+        return f"{self.number}"
 
     class Meta:
         db_table = 'content"."wagons'
@@ -38,7 +40,6 @@ class Wagon(UUIDMixin, TimeStampedMixin):
 
 
 class Train(UUIDMixin, TimeStampedMixin):
-
     title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
 
     class Meta:
@@ -52,7 +53,9 @@ class Node(UUIDMixin, TimeStampedMixin):
     title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
     role = models.CharField(_("role"), max_length=128, blank=True, null=True)
     location = models.PointField(_("location"), blank=False, null=False)
-    station_id = models.BigIntegerField(_("station_id"), blank=True, null=True, editable=False)
+    station_id = models.BigIntegerField(
+        _("station_id"), blank=True, null=True, editable=False
+    )
 
     class Meta:
         db_table = 'content"."nodes'
@@ -77,7 +80,9 @@ class Way(UUIDMixin, TimeStampedMixin):
 class Railway(UUIDMixin, TimeStampedMixin):
     osm_id = models.BigIntegerField(_("osm_id"), blank=False, null=False, unique=True)
     title = models.CharField(_("title"), max_length=4096, blank=True, null=True)
-    title_from = models.CharField(_("title_from"), max_length=512, blank=True, null=True)
+    title_from = models.CharField(
+        _("title_from"), max_length=512, blank=True, null=True
+    )
     title_to = models.CharField(_("title_to"), max_length=512, blank=True, null=True)
     operator = models.CharField(_("operator"), max_length=512, blank=True, null=True)
     network = models.CharField(_("network"), max_length=512, blank=True, null=True)
@@ -94,18 +99,20 @@ class Railway(UUIDMixin, TimeStampedMixin):
 
 class RailwayNode(UUIDMixin, TimeStampedMixin):
     node_osm_id = models.ForeignKey(
-        "Node", 
-        null=True, blank=True,
-        to_field='osm_id',
-        db_column='node_osm_id',
+        "Node",
+        null=True,
+        blank=True,
+        to_field="osm_id",
+        db_column="node_osm_id",
         on_delete=models.CASCADE,
         verbose_name=_("Node"),
     )
     railway_osm_id = models.ForeignKey(
         "Railway",
-        null=True, blank=True,
-        to_field='osm_id',
-        db_column='railway_osm_id',
+        null=True,
+        blank=True,
+        to_field="osm_id",
+        db_column="railway_osm_id",
         on_delete=models.CASCADE,
         verbose_name=_("Railway"),
     )
@@ -118,18 +125,20 @@ class RailwayNode(UUIDMixin, TimeStampedMixin):
 
 class RailwayWay(UUIDMixin, TimeStampedMixin):
     way_osm_id = models.ForeignKey(
-        "Way", 
-        null=True, blank=True,
-        to_field='osm_id',
-        db_column='way_osm_id',
+        "Way",
+        null=True,
+        blank=True,
+        to_field="osm_id",
+        db_column="way_osm_id",
         on_delete=models.CASCADE,
         verbose_name=_("Way"),
     )
     railway_osm_id = models.ForeignKey(
         "Railway",
-        null=True, blank=True,
-        to_field='osm_id',
-        db_column='railway_osm_id',
+        null=True,
+        blank=True,
+        to_field="osm_id",
+        db_column="railway_osm_id",
         on_delete=models.CASCADE,
         verbose_name=_("Railway"),
     )

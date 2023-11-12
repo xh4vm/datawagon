@@ -1,6 +1,5 @@
-
-
 SCHEMA = "content"
+
 
 class Schema:
     TRAINS = "trains"

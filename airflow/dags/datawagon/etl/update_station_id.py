@@ -7,7 +7,7 @@ from src.schema import SCHEMA
 
 def run():
     extractor = CSVExtractor(path=HACKATHON_CONFIG.PARTIAL_RESULTS_PATH)
-    
+
     station_transformer = StationTransformer()
 
     stations_df = extractor.extract()
