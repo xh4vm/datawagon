@@ -1,0 +1,149 @@
+// RouteCard.module.scss
+@import '../../../colors';
+
+.animatedRouteCard {
+  transition: transform 0.5s ease-in-out;
+  transform: translateY(-10px);
+}
+
+.gridContainer {
+
+}
+
+.routeCard {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
+  width: 94%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+
+  .progressBarContainer {
+    position: relative;
+    height: 8px;
+    width: 100%;
+    margin: 5px;
+  }
+
+  .progressBarBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: $gray; /* Цвет серого фона */
+  }
+
+  .progressBarFill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: $primary; /* Измените цвет в соответствии с вашим дизайном */
+    width: 80%; /* Замените на динамический стиль или значение прогресса */
+  }
+
+  .progressBarContainer, .progressBarBackground, .progressBarFill {
+    border-radius: 10px;
+  }
+}
+
+.routeInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.routeNumber {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.status {
+  font-family: Poppins, "Helvetica Neue", Helvetica, Arial, system-ui;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: $red;
+  color: $white;
+}
+
+.detailsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Две колонки равной ширины */
+  grid-gap: 10px; /* Расстояние между ячейками */
+}
+
+.leftDetails {
+  text-align: left;
+}
+
+.centerDetails {
+  text-align: left;
+}
+
+.rightDetails {
+  text-align: left;
+  strong {
+    float: left;
+  }
+}
+
+.selected {
+  border: 2px solid red !important;
+}
+
+.location,
+.time,
+.loadingPoints,
+.trainInfo,
+.cargoInfo {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.location strong,
+.time strong,
+.loadingPoints strong,
+.trainInfo strong,
+.cargoInfo strong {
+  font-weight: bold;
+  white-space: pre-wrap;
+}
+
+
+.loadingPointsContainer {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.loadingPointsTitle {
+  display: block;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.loadingPoints {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.leftPoint,
+.rightPoint {
+  width: 48%; // Ширина блока
+  margin-bottom: 5px;
+}
+
+.leftPoint {
+  text-align: left;
+}
+
+.rightPoint {
+  text-align: right;
+}

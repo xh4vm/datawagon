@@ -1,0 +1,41 @@
+// Notification.module.scss
+@import "../../../../colors";
+
+.notificationCard {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 8px;
+  width: 90%;
+}
+
+.time {
+  margin-right: 12px;
+  font-size: 12px;
+  color: $gray;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.warning {
+  color:orange;
+}
+
+.error {
+  color: $red;
+}
+
+.info {
+  color: blueviolet;
+}

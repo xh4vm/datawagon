@@ -1,0 +1,79 @@
+/* FilterModal.module.scss */
+@import "../../../colors";
+
+.filterModal {
+  width: 91%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  z-index: 1000;
+  overflow: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #333;
+}
+
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.inlineInputs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+input,
+.dateButton {
+  height: 24px;
+  padding: 6px;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 97%;
+}
+
+.hiddenImg {
+  opacity: 0.0;
+}
+
+.dateButton {
+  color: #fff;
+  width: 44px !important;
+  height: 44px !important;
+}
+
+.dateButton {
+  cursor: pointer;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  background-color: $gray;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: $white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+DatePicker {
+  width: 33%;
+}

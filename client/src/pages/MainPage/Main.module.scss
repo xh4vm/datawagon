@@ -1,0 +1,20 @@
+@import '../../colors';
+
+
+body {
+  background-color: $background;
+}
+
+.mainContainer {
+  display: flex;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.leftBarContainer {
+  width: 33%;
+}
+
+.mapContainer {
+  width: 67%;
+}
