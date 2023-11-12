@@ -178,15 +178,15 @@ class ClickhouseNode06(BaseSettings):
 
 
 class GeofabrikSettings(BaseSettings):
-    URL: str
+    URLS: str
     
     class Config:
         env_prefix = "GEOFABRIK_"
 
 
 class OSMSettings(BaseSettings):
-    FILE: str
-    BACKUP_FILE: str
+    FILES: str
+    # BACKUP_FILE: str
     
     class Config:
         env_prefix = "OSM_"
@@ -194,6 +194,7 @@ class OSMSettings(BaseSettings):
     
 class HackathonSettings(BaseSettings):
     DISL_PATH: str
+    PARTIAL_RESULTS_PATH: str
     
     class Config:
         env_prefix = "HACKATHON_"

@@ -80,7 +80,7 @@ async def map_status_route(
     visible_station = station_df['station_id'].dropna().astype('int').astype('string').unique().tolist()
 
     if len(visible_station) == 0:
-        return []
+        return {}
     
     join_str = ", ".join(visible_station)
 

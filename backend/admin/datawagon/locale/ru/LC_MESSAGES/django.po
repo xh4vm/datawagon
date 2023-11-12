@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-17 07:39+0000\n"
+"POT-Creation-Date: 2023-11-11 23:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,66 +18,152 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mincifra/admin.py:55
-msgid "Organization networks"
-msgstr "Сети организаций"
+#: backend/admin/datawagon/models.py:27 backend/admin/datawagon/models.py:46
+#: backend/admin/datawagon/models.py:47
+#, fuzzy
+#| msgid "Trail"
+msgid "Train"
+msgstr "Cигнатура"
 
-#: mincifra/models.py:25 mincifra/models.py:44
-msgid "Organization"
-msgstr "Оргранизация"
+#: backend/admin/datawagon/models.py:29
+msgid "number"
+msgstr "Номер"
 
-#: mincifra/models.py:30
-msgid "Network"
-msgstr "Сеть"
+#: backend/admin/datawagon/models.py:36
+msgid "Wagon"
+msgstr "Вагон"
 
-#: mincifra/models.py:31
-msgid "Networks"
-msgstr "Сети"
+#: backend/admin/datawagon/models.py:37
+msgid "Wagons"
+msgstr "Вагоны"
 
-#: mincifra/models.py:35
-msgid "zone"
-msgstr "зона"
-
-#: mincifra/models.py:36
+#: backend/admin/datawagon/models.py:42 backend/admin/datawagon/models.py:52
+#: backend/admin/datawagon/models.py:79
 msgid "title"
 msgstr "Заголовок"
 
-#: mincifra/models.py:37
-msgid "inn"
-msgstr "ИНН"
+#: backend/admin/datawagon/models.py:51 backend/admin/datawagon/models.py:67
+#: backend/admin/datawagon/models.py:78
+msgid "osm_id"
+msgstr "OSM идентификатор"
 
-#: mincifra/models.py:38
-msgid "address"
-msgstr "адрес"
+#: backend/admin/datawagon/models.py:53
+msgid "role"
+msgstr "Роль"
 
-#: mincifra/models.py:39
-msgid "count_net_devices"
-msgstr "количество СУ"
+#: backend/admin/datawagon/models.py:54
+#, fuzzy
+#| msgid "classification"
+msgid "location"
+msgstr "Координаты точки"
 
-#: mincifra/models.py:40
-msgid "count_address"
-msgstr "количество адресов"
+#: backend/admin/datawagon/models.py:55
+msgid "station_id"
+msgstr "ИД станции"
 
-#: mincifra/models.py:45
-msgid "Organizations"
-msgstr "Организации"
+#: backend/admin/datawagon/models.py:59 backend/admin/datawagon/models.py:102
+msgid "Node"
+msgstr "Узел"
 
-#: mincifra/models.py:49
-msgid "domain_name"
-msgstr "доменное имя"
+#: backend/admin/datawagon/models.py:60
+msgid "Nodes"
+msgstr "Узлы"
 
-#: mincifra/models.py:50
-msgid "source"
-msgstr "источник"
+#: backend/admin/datawagon/models.py:68
+msgid "length"
+msgstr "Длина"
 
-#: mincifra/models.py:51
-msgid "classification"
-msgstr "классификация"
+#: backend/admin/datawagon/models.py:69 backend/admin/datawagon/models.py:84
+msgid "geo"
+msgstr "Гео координаты"
 
-#: mincifra/models.py:55
-msgid "Trail"
-msgstr "Cигнатура"
+#: backend/admin/datawagon/models.py:73 backend/admin/datawagon/models.py:126
+msgid "Way"
+msgstr "Путь"
 
-#: mincifra/models.py:56
-msgid "Trails"
-msgstr "Cигнатуры"
+#: backend/admin/datawagon/models.py:74
+msgid "Ways"
+msgstr "Пути"
+
+#: backend/admin/datawagon/models.py:80
+#, fuzzy
+#| msgid "title"
+msgid "title_from"
+msgstr "Пункт отправки"
+
+#: backend/admin/datawagon/models.py:81
+#, fuzzy
+#| msgid "title"
+msgid "title_to"
+msgstr "Пункт назначения"
+
+#: backend/admin/datawagon/models.py:82
+msgid "operator"
+msgstr "Оператор"
+
+#: backend/admin/datawagon/models.py:83
+#, fuzzy
+#| msgid "Network"
+msgid "network"
+msgstr "Сеть"
+
+#: backend/admin/datawagon/models.py:88 backend/admin/datawagon/models.py:110
+#: backend/admin/datawagon/models.py:134
+msgid "Railway"
+msgstr "ЖД путь"
+
+#: backend/admin/datawagon/models.py:89
+msgid "Railways"
+msgstr "ЖД путь"
+
+#: backend/admin/datawagon/models.py:115
+msgid "RailwayNode"
+msgstr "Узел ЖД пути"
+
+#: backend/admin/datawagon/models.py:116
+msgid "RailwayNodes"
+msgstr "Узелы ЖД путей"
+
+#: backend/admin/datawagon/models.py:139
+msgid "RailwayWay"
+msgstr ""
+
+#: backend/admin/datawagon/models.py:140
+msgid "RailwayWays"
+msgstr ""
+
+#~ msgid "Organization networks"
+#~ msgstr "Сети организаций"
+
+#~ msgid "Organization"
+#~ msgstr "Оргранизация"
+
+#~ msgid "Networks"
+#~ msgstr "Сети"
+
+#~ msgid "zone"
+#~ msgstr "зона"
+
+#~ msgid "inn"
+#~ msgstr "ИНН"
+
+#~ msgid "address"
+#~ msgstr "адрес"
+
+#~ msgid "count_net_devices"
+#~ msgstr "количество СУ"
+
+#~ msgid "count_address"
+#~ msgstr "количество адресов"
+
+#~ msgid "Organizations"
+#~ msgstr "Организации"
+
+#~ msgid "domain_name"
+#~ msgstr "доменное имя"
+
+#~ msgid "source"
+#~ msgstr "источник"
+
+#~ msgid "Trails"
+#~ msgstr "Cигнатуры"
