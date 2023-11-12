@@ -111,3 +111,6 @@ class PostgresLoader(BaseLoader):
             )
 
         logger.info("Success finish saving all data to PostgreSQL database instance.")
+
+    def execute(self, query: str):
+        return self._cursor.execute(query)

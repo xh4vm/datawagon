@@ -6,8 +6,12 @@ from src.core.config import GEOFABRIK_CONFIG, OSM_CONFIG
 
 
 def run():
-    if os.path.exists(OSM_CONFIG.FILE):
-        os.rename(OSM_CONFIG.FILE, OSM_CONFIG.BACKUP_FILE)
+    FILES = OSM_CONFIG.FILES.split(',')
+    URLS = GEOFABRIK_CONFIG.URLS.split(',')
 
-    wget.download(url=GEOFABRIK_CONFIG.URL, out=OSM_CONFIG.FILE)
-    logger.info(f'[+] Success downloading "{GEOFABRIK_CONFIG.URL}" to "{OSM_CONFIG.FILE}"')
+    for index, URL in enumerate(URLS):
+        if os.path.exists(FILES[index]):
+            os.remove(FILES[index])
+
+        wget.download(url=URL, out=FILES[index])
+        logger.info(f'[+] Success downloading "{URL}" to "{FILES[index]}"')

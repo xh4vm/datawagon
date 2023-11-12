@@ -3,7 +3,6 @@ from .base import JSONModel, UUIDModelMixin, TimeStampedModelMixin
 
 class NodeData(JSONModel, UUIDModelMixin, TimeStampedModelMixin):
     osm_id: int
-    st_id: int
     title: str
     location: str
     role: str
