@@ -9,14 +9,14 @@ class Geo(JSONModel):
     latitude: float
     longitude: float
 
-    @validator('latitude')
+    @validator("latitude")
     def latitude_ge_zero(cls, value: float) -> float:
         if value >= 0:
             return value
 
         raise ValueError('"latitude" must be greater than zero')
-    
-    @validator('longitude')
+
+    @validator("longitude")
     def longitude_ge_zero(cls, value: float) -> float:
         if value >= 0:
             return value
@@ -25,13 +25,18 @@ class Geo(JSONModel):
 
 
 class GeoJSONType(JSONModel):
-    type: str = Field(description='Тип GeoJSON', examples=['Point'])
-    coordinates: list[Any] = Field(description='Координаты GeoJSON', examples=[[37.5362099,55.7668608]])
+    type: str = Field(description="Тип GeoJSON", examples=["Point"])
+    coordinates: list[Any] = Field(
+        description="Координаты GeoJSON", examples=[[37.5362099, 55.7668608]]
+    )
 
 
 class GeoPoint(JSONModel):
-    title: str | None = Field(description='Имя гео точки', examples=['Дмитров'], default=None)
+    title: str | None = Field(
+        description="Имя гео точки", examples=["Дмитров"], default=None
+    )
     geo: dict
+
 
 class GeoPointOperdate(GeoPoint):
     operdate: datetime

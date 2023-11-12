@@ -179,7 +179,7 @@ class ClickhouseNode06(BaseSettings):
 
 class GeofabrikSettings(BaseSettings):
     URLS: str
-    
+
     class Config:
         env_prefix = "GEOFABRIK_"
 
@@ -187,15 +187,15 @@ class GeofabrikSettings(BaseSettings):
 class OSMSettings(BaseSettings):
     FILES: str
     # BACKUP_FILE: str
-    
+
     class Config:
         env_prefix = "OSM_"
 
-    
+
 class HackathonSettings(BaseSettings):
     DISL_PATH: str
     PARTIAL_RESULTS_PATH: str
-    
+
     class Config:
         env_prefix = "HACKATHON_"
 
@@ -216,7 +216,7 @@ HACKATHON_CONFIG: HackathonSettings = HackathonSettings()
 REDIS_CONFIG = RedisSettings()
 POSTGRES_CONFIG = PostgresSettings()
 GEOFABRIK_CONFIG = GeofabrikSettings()
-OSM_CONFIG = OSMSettings() 
+OSM_CONFIG = OSMSettings()
 
 BACKOFF_CONFIG: dict[str, Any] = {
     "wait_gen": backoff.expo,

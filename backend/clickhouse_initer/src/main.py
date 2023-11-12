@@ -32,7 +32,10 @@ if __name__ == "__main__":
         logger.info("[*] Connecting into clickhouse")
 
         client = ClickhouseClient(
-            host=NODES[0].HOST, port=NODES[0].PORT, user=NODES[0].USER, password=NODES[0].PASSWORD
+            host=NODES[0].HOST,
+            port=NODES[0].PORT,
+            user=NODES[0].USER,
+            password=NODES[0].PASSWORD,
         )
 
         extractor = CSVExtractor(

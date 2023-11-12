@@ -5,25 +5,25 @@ from typing import Any
 
 
 class AppSettings(BaseSettings):
-    HOST: str = Field('localhost')
+    HOST: str = Field("localhost")
     PORT: int
     PROJECT_NAME: str
     API_PATH: str
     API_URL: str
-    SCHEMA_REGISTRY_URL: str = Field('http://localhost:8081')
+    SCHEMA_REGISTRY_URL: str = Field("http://localhost:8081")
     API_VERSION: str
     SWAGGER_PATH: str
     JSON_SWAGGER_PATH: str
 
     class Config:
-        env_prefix = 'GEO_ROUTER_'
+        env_prefix = "GEO_ROUTER_"
 
 
 class KafkaTopicsSettings(BaseSettings):
     STATUS_ROUTE: str
 
     class Config:
-        env_prefix = 'STORAGE_KAFKA_TOPICS_'
+        env_prefix = "STORAGE_KAFKA_TOPICS_"
 
 
 class KafkaSettings(BaseSettings):
@@ -31,7 +31,7 @@ class KafkaSettings(BaseSettings):
     TOPICS: BaseSettings = Field(default_factory=KafkaTopicsSettings)
 
     class Config:
-        env_prefix = 'STORAGE_KAFKA_'
+        env_prefix = "STORAGE_KAFKA_"
 
 
 class PostgresSettings(BaseSettings):
@@ -53,7 +53,7 @@ class PostgresSettings(BaseSettings):
             "host": self.HOST,
             "port": self.PORT,
         }
-    
+
 
 class ClickhouseSettings(BaseSettings):
     NODES: str
@@ -209,6 +209,7 @@ NODES = [
 CLICKHOUSE_CONFIG: ClickhouseSettings = ClickhouseSettings()
 
 POSTGRES: PostgresSettings = PostgresSettings()
+
 
 class Config(BaseSettings):
     APP: AppSettings = AppSettings()

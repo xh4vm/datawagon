@@ -10,10 +10,28 @@ from src.models.osm import RailwayData
 
 class RailwayTransformer(BaseTransformer):
     def transform(
-        self, ways: pd.DataFrame, members: pd.DataFrame, relations: pd.DataFrame, to_dict: bool = False
+        self,
+        ways: pd.DataFrame,
+        members: pd.DataFrame,
+        relations: pd.DataFrame,
+        to_dict: bool = False,
     ) -> Iterator[Any]:
-        raw = pd.merge(ways, members, left_on="w_id", right_on="ref", how="left", suffixes=["_way", ""])
-        raw = pd.merge(raw, relations, left_on="r_id", right_on="r_id", how="left", suffixes=["", "_rel"])
+        raw = pd.merge(
+            ways,
+            members,
+            left_on="w_id",
+            right_on="ref",
+            how="left",
+            suffixes=["_way", ""],
+        )
+        raw = pd.merge(
+            raw,
+            relations,
+            left_on="r_id",
+            right_on="r_id",
+            how="left",
+            suffixes=["", "_rel"],
+        )
 
         gdf = gpd.GeoDataFrame(raw, geometry="geo")
 

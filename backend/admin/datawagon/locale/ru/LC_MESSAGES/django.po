@@ -18,12 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: backend/admin/datawagon/models.py:27 backend/admin/datawagon/models.py:46
 #: backend/admin/datawagon/models.py:47
-#, fuzzy
-#| msgid "Trail"
 msgid "Train"
-msgstr "Cигнатура"
+msgstr "Поезд"
 
 #: backend/admin/datawagon/models.py:29
 msgid "number"

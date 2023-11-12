@@ -67,4 +67,6 @@ class ClickhouseLoader(BaseLoader):
         logger.info(self.conn.execute("SHOW DATABASES"))
 
         # logger.info(df.head(2).to_dict())
-        return self.conn.execute(f"INSERT INTO {table} VALUES ", (_.model_dump() for _ in data))
+        return self.conn.execute(
+            f"INSERT INTO {table} VALUES ", (_.model_dump() for _ in data)
+        )

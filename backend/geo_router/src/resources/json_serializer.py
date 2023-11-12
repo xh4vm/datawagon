@@ -5,6 +5,7 @@ from dependency_injector import resources
 
 from .serializer import Serializer
 
+
 class JSONSerializerResource(resources.Resource):
     def init(
         self,

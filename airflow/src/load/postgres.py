@@ -90,7 +90,7 @@ class PostgresLoader(BaseLoader):
 
             logger.error(f"Error stack or flush data! Message: {err}")
             raise err
-        
+
     def _truncate(self, schema_name: str) -> None:
         self._cursor.execute(f"TRUNCATE TABLE {self._schema}.{schema_name};")
 
@@ -98,7 +98,6 @@ class PostgresLoader(BaseLoader):
         logger.info("Start saving all data to PostgreSQL database instance.")
 
         for schema_name in self._metadata.keys():
-
             if truncate_before:
                 self._truncate(schema_name=schema_name)
 

@@ -8,18 +8,14 @@ from src.models.osm import NodeData
 
 
 class NodeTransformer(BaseTransformer):
-    def transform(
-        self, nodes: pd.DataFrame, to_dict: bool = False
-    ) -> Iterator[Any]:
-        
+    def transform(self, nodes: pd.DataFrame, to_dict: bool = False) -> Iterator[Any]:
         for _, raw_elem in nodes.iterrows():
-
             elem = NodeData(
-                osm_id=raw_elem['n_id'],
-                title=raw_elem['name'],
-                location=to_geojson(raw_elem['geo']),
-                role=raw_elem['railway'],
-                station_id=raw_elem.get('ST_ID')
+                osm_id=raw_elem["n_id"],
+                title=raw_elem["name"],
+                location=to_geojson(raw_elem["geo"]),
+                role=raw_elem["railway"],
+                station_id=raw_elem.get("ST_ID"),
             )
 
             yield elem.model_dump() if to_dict else elem
